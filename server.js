@@ -19,8 +19,8 @@ mongoose.connect(config.DB_mongo, {useNewUrlParser: true}).then(
   }
 );
 
-app.use(bodyParser.json({limit: '10mb'}));
 app.use(cors());
+app.use(bodyParser.json({limit: '10mb'}));
 
 // API Route options
 app.use('/api/comics', require('./routes/comics-api'));
