@@ -9,11 +9,11 @@ var app = express();
 
 // DB Connection
 mongoose.Promise = global.Promise;
-mongoose.connect(config.DB_mongo, {useNewUrlParser: true}).then(
+mongoose.connect(config.DB_local, {useNewUrlParser: true}).then(
   () => {console.log('Database is connected')},
   err => {
     console.log('Can not connect to the database' + err);
-    mongoose.connect(config.DB_local, {useNewUrlParser: true}).then(
+    mongoose.connect(config.DB_mongo, {useNewUrlParser: true}).then(
       () => {console.log('Database is connected')},
       err => {console.log('Can not connect to the database' + err)});
   }

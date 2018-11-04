@@ -44,6 +44,20 @@ router.get('/card/bySet/:setCode', function (req, res) {
   }).sort([['display_number', 1]]);
 });
 
+
+/* GET cards by set code */
+router.get('/card/bySetAndName/:setCode/:searchString', function (req, res) {
+  MtgCard.find({
+    $and: [
+      {set: req.params.setCode},
+      {name: {$regex: new RegExp(req.params.searchString), $options: 'i'}}
+    ]
+  }, function (err, comics) {
+    if (err) res.send(err);
+    res.send(comics);
+  }).sort([['display_number', 1]]);
+});
+
 /* UPDATE card */
 router.put('/card/update', function (req, res) {
   let mtgCard = req.body;
@@ -61,7 +75,7 @@ router.post('/card/add/all', function (req, res) {
   let cards = req.body;
   let okCount = 0;
   let errorsCount = 0;
-  cards.forEach(function(card) {
+  cards.forEach(function (card) {
     MtgCard.updateOne(
       {id: card.id},
       {$set: card},

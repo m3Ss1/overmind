@@ -105,4 +105,13 @@ export class MtgDashboardComponent implements OnInit {
     this.mtgService.updateCard(card).subscribe();
   }
 
+  filterTable(searchString: String) {
+    this.mtgService.getCardsBySetWithFilter(this.selectedSet.code, searchString)
+      .subscribe(
+        cards => {
+          MtgDashboardComponent.populateManaCostDisplay(cards);
+          this.mtgCards = cards;
+        }
+      );
+  }
 }

@@ -27,7 +27,14 @@
         <thead>
         <tr>
           <th scope="col">#</th>
-          <th scope="col">Name</th>
+          <th scope="col">
+            <div class="input-group">
+              <input type="text" (keyup.enter)="filterTable(nameFilter)" [(ngModel)]="nameFilter" placeholder="Name"/>
+              <div class="input-group-append">
+                <div class="input-group-text"><i class="fas fa-redo pointer" (click)="getCardsBySet(selectedSet); nameFilter = null;"></i></div>
+              </div>
+            </div>
+          </th>
           <th scope="col">Type</th>
           <th scope="col">Cost</th>
           <th scope="col"><i class="fas fa-dollar-sign"></i></th>
@@ -61,12 +68,7 @@
             <i class="far fa-plus-square ml-1 pointer" (click)="increaseInDeckByOne(card)"></i>
           </td>
           <td>
-            <div class="input-group input-group-sm" style="width:150px;">
-              <input type="text" class="form-control" placeholder="" value="{{card.deck_note}}">
-              <div class="input-group-append">
-                <button class="btn btn-outline-secondary" type="button" (click)="storeDeckNote(card)">Save</button>
-              </div>
-            </div>
+            <input type="text" class="form-control form-control-sm" placeholder="" [(ngModel)]="card.deck_note" (change)="storeDeckNote(card)">
           </td>
         </tr>
         </tbody>
