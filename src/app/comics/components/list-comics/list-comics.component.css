@@ -1,0 +1,12 @@
+.my-list-group-item {
+  font-size: 12px;
+  padding: 5px;
+}
+
+.my-list-group-item span.badge {
+  font-size: 10px;
+}
+
+.pointer {
+  cursor: pointer;
+}

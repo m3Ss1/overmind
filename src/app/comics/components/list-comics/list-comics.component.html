@@ -1,0 +1,63 @@
+<div class="container-fluid">
+
+  <div class="row">
+
+    <!-- Left Column displaying all Series -->
+    <div class="col-md-3">
+      <h3>Series</h3>
+      <ul class="list-group">
+        <li class="list-group-item my-list-group-item" *ngFor="let serie of series"
+            (click)="getComicsBySerie(serie)">
+          {{serie._id}} <span class="badge">{{ serie.read }}/{{ serie.total }}</span>
+          <div class="progress" style="height: 1px;">
+            <div class="progress-bar" role="progressbar" [ngStyle]="{'width': serie.read/serie.total*100 + '%'}"></div>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Main Table for Comics -->
+    <div class="col-md-9" *ngIf="selectedSerie">
+      <h3>{{selectedSerie._id}}</h3>
+      <table class="table table-sm table-hover">
+        <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Release Date</th>
+          <th scope="col">Title</th>
+          <th scope="col">Pages</th>
+          <th scope="col">Read Date</th>
+          <th scope="col">Actions</th>
+        </tr>
+        </thead>
+        <tbody class="my-list-group-item">
+        <tr *ngFor="let comic of comics">
+          <th scope="row"
+              [ngClass]="{'text-success': comic.read,
+                          'text-dark':    comic.in_collection && !comic.read,
+                          'text-danger': !comic.in_collection}">
+            {{comic.serie_number}}
+          </th>
+          <td>{{comic.release_date | date:'dd-MM-y'}}</td>
+          <td>{{comic.title}}</td>
+          <td>{{comic.pages | number}}</td>
+          <td>{{comic.read_date | date:'dd-MM-y'}}</td>
+          <td>
+            <i class="fas fa-bookmark pointer" style="padding-right: 5px;"
+                [ngClass]="{'text-success': comic.in_collection, 'text-dark': !comic.in_collection}"
+                (click)="toggleOwned(comic)"></i>
+            <i class="fas fa-book pointer" style="padding-right: 5px;"
+                [ngClass]="{'text-success': comic.read, 'text-dark': !comic.read}"
+                (click)="toggleRead(comic)"></i>
+            <i class="fas fa-clone text-warning pointer" style="padding-right: 10px;"
+                (click)="duplicate(comic)"></i>
+            <i class="fas fa-trash text-danger pointer" (click)="remove(comic)"></i>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+</div>
