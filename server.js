@@ -9,11 +9,11 @@ var app = express();
 
 // DB Connection
 mongoose.Promise = global.Promise;
-mongoose.connect(config.DB_local, {useNewUrlParser: true}).then(
+mongoose.connect(config.DB_mongo, {useNewUrlParser: true}).then(
   () => {console.log('Database is connected')},
   err => {
     console.log('Can not connect to the database' + err);
-    mongoose.connect(config.DB_mongo, {useNewUrlParser: true}).then(
+    mongoose.connect(config.DB_local, {useNewUrlParser: true}).then(
       () => {console.log('Database is connected')},
       err => {console.log('Can not connect to the database' + err)});
   }
@@ -21,6 +21,9 @@ mongoose.connect(config.DB_local, {useNewUrlParser: true}).then(
 
 app.use(cors());
 app.use(bodyParser.json({limit: '10mb'}));
+
+// Point static path to dist
+app.use(express.static(path.join(__dirname, 'dist/overmind')));
 
 // API Route options
 app.use('/api/comics', require('./routes/comics-api'));
