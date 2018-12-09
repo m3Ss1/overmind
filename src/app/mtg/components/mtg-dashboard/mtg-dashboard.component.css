@@ -6,6 +6,22 @@
   font-size: 14px;
 }
 
+.font-16 {
+  font-size: 16px;
+}
+
+.font-20 {
+  font-size: 20px;
+}
+
 .pointer {
   cursor: pointer;
+}
+
+table {
+  width: 100%;
+}
+
+.material-icons.md-18 {
+  font-size: 18px;
 }

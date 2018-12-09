@@ -47,10 +47,6 @@ export class MtgService {
     return this.http.get<Card[]>(API_URL + '/api/mtg/card/bySet/' + setCode);
   }
 
-  getCardsBySetWithFilter(setCode: string, searchString: String): Observable<Card[]> {
-    return this.http.get<Card[]>(API_URL + '/api/mtg/card/bySetAndName/' + setCode + '/' + searchString);
-  }
-
   updateCard(card: Card): Observable<Card> {
     return this.http.put<Card>(API_URL + '/api/mtg/card/update', card);
   }

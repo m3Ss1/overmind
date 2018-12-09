@@ -1,9 +1,24 @@
 // Angular
 import {BrowserModule} from '@angular/platform-browser';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {HttpClientModule} from '@angular/common/http';
 import {FormsModule} from '@angular/forms';
+import {
+  MatButtonModule,
+  MatFormFieldModule, MatGridListModule,
+  MatIconModule,
+  MatInputModule,
+  MatListModule,
+  MatMenuModule, MatOptionModule,
+  MatPaginatorModule, MatSelectModule,
+  MatSidenavModule,
+  MatTableModule,
+  MatToolbarModule
+} from '@angular/material';
+import 'hammerjs';
+import {LayoutModule} from '@angular/cdk/layout';
 // 3rd party
 // App
 import {AppComponent} from './app.component';
@@ -38,10 +53,25 @@ const routes: Routes = [
     MtgDashboardComponent
   ],
   imports: [
-    BrowserModule,
     RouterModule.forRoot(routes),
+    BrowserModule,
+    BrowserAnimationsModule,
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
+    MatInputModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatToolbarModule,
+    MatMenuModule,
+    MatSidenavModule,
+    MatListModule,
+    MatIconModule,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatOptionModule,
+    MatSelectModule,
+    MatGridListModule,
+    LayoutModule
   ],
   providers: [
     ComicsService,

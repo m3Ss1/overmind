@@ -1,6 +1,7 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {Card, Set} from 'mtg-interfaces';
 import {MtgService} from '../../mtg.service';
+import {MatPaginator, MatTableDataSource} from '@angular/material';
 
 @Component({
   selector: 'app-mtg-dashboard',
@@ -12,6 +13,10 @@ export class MtgDashboardComponent implements OnInit {
   mtgSets: Set[] = [];
   selectedSet: Set;
   mtgCards: Card[] = [];
+
+  displayedColumns: string[] = ['number', 'rarity', 'name', 'type', 'cost', 'value', 'owned', 'in_deck', 'deck_notes'];
+  dataSource: MatTableDataSource<Card>;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
 
   private static populateManaCostDisplay(cards: Card[]) {
     for (const card of cards) {
@@ -49,12 +54,20 @@ export class MtgDashboardComponent implements OnInit {
     );
   }
 
+  reset() {
+    this.mtgCards = null;
+    this.selectedSet = null;
+    this.dataSource = null;
+    this.paginator = null;
+  }
+
   getCardsBySet(set: Set) {
+    this.selectedSet = set;
     this.mtgService.getCardsBySet(set.code).subscribe(
       cards => {
-        this.selectedSet = set;
         MtgDashboardComponent.populateManaCostDisplay(cards);
-        this.mtgCards = cards;
+        this.dataSource = new MatTableDataSource<Card>(cards);
+        this.dataSource.paginator = this.paginator;
       }
     );
   }
@@ -105,13 +118,8 @@ export class MtgDashboardComponent implements OnInit {
     this.mtgService.updateCard(card).subscribe();
   }
 
-  filterTable(searchString: String) {
-    this.mtgService.getCardsBySetWithFilter(this.selectedSet.code, searchString)
-      .subscribe(
-        cards => {
-          MtgDashboardComponent.populateManaCostDisplay(cards);
-          this.mtgCards = cards;
-        }
-      );
+  applyFilter(filterValue: string) {
+    this.dataSource.filter = filterValue.trim().toLowerCase();
   }
+
 }

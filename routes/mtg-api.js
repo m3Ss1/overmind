@@ -33,25 +33,10 @@ router.get('/set/all', function (req, res) {
   }).sort([['released_at', -1]]);
 });
 
-
 /* GET cards by set code */
 router.get('/card/bySet/:setCode', function (req, res) {
   MtgCard.find({
     set: req.params.setCode
-  }, function (err, comics) {
-    if (err) res.send(err);
-    res.send(comics);
-  }).sort([['display_number', 1]]);
-});
-
-
-/* GET cards by set code */
-router.get('/card/bySetAndName/:setCode/:searchString', function (req, res) {
-  MtgCard.find({
-    $and: [
-      {set: req.params.setCode},
-      {name: {$regex: new RegExp(req.params.searchString), $options: 'i'}}
-    ]
   }, function (err, comics) {
     if (err) res.send(err);
     res.send(comics);
