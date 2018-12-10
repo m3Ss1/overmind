@@ -7,12 +7,16 @@ import {HttpClientModule} from '@angular/common/http';
 import {FormsModule} from '@angular/forms';
 import {
   MatButtonModule,
-  MatFormFieldModule, MatGridListModule,
+  MatChipsModule,
+  MatFormFieldModule,
+  MatGridListModule,
   MatIconModule,
   MatInputModule,
   MatListModule,
-  MatMenuModule, MatOptionModule,
-  MatPaginatorModule, MatSelectModule,
+  MatMenuModule,
+  MatOptionModule,
+  MatPaginatorModule,
+  MatSelectModule,
   MatSidenavModule,
   MatTableModule,
   MatToolbarModule
@@ -71,6 +75,7 @@ const routes: Routes = [
     MatOptionModule,
     MatSelectModule,
     MatGridListModule,
+    MatChipsModule,
     LayoutModule
   ],
   providers: [

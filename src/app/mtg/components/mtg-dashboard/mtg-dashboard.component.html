@@ -1,19 +1,16 @@
 <mat-grid-list cols="10" rowHeight="100px">
 
-  <mat-grid-tile [colspan]="2" [rowspan]="1">
-    <mat-form-field>
-      <mat-select placeholder="Select MTG Set">
-        <mat-option (click)="reset()">None</mat-option>
-        <mat-option value="{{mtgSet.code}}" *ngFor="let mtgSet of mtgSets" (click)="getCardsBySet(mtgSet)">
-          <span class="ss ss-{{mtgSet.code}} ss-2x ss-fw mr-1"></span>
-          <span>{{mtgSet.name}}</span>
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
+  <!-- All Sets -->
+  <mat-grid-tile [colspan]="10" [rowspan]="1">
+    <mat-chip-list [selectable]="true">
+      <mat-chip *ngFor="let mtgSet of mtgSets" (click)="getCardsBySet(mtgSet); chip.select()" #chip="matChip" color="accent">
+        <span class="ss ss-{{mtgSet.code}} ss-2x ss-fw pointer"></span>
+      </mat-chip>
+    </mat-chip-list>
   </mat-grid-tile>
 
   <!-- Selected Set Title -->
-  <mat-grid-tile [colspan]="6" [rowspan]="1">
+  <mat-grid-tile [colspan]="8" [rowspan]="1">
     <div *ngIf="selectedSet">
       <h1>
         <span class="ss ss-{{selectedSet.code}} ss-fw ss-2x mr-2"></span>
