@@ -1,3 +1,7 @@
+.font-bold {
+  font-weight: bold;
+}
+
 .font-12 {
   font-size: 12px;
 }
@@ -8,6 +12,10 @@
 
 .font-16 {
   font-size: 16px;
+}
+
+.font-18 {
+  font-size: 18px;
 }
 
 .font-20 {
@@ -22,6 +30,23 @@ table {
   width: 100%;
 }
 
-.material-icons.md-18 {
-  font-size: 18px;
+.wid-25 {
+  width: 25px;
+}
+
+.wid-50 {
+  width: 50px;
+}
+
+.spinner-column {
+  width: 100px;
+  text-align: center;
+}
+
+.red {
+  color: red;
+}
+
+.green {
+  color: green;
 }

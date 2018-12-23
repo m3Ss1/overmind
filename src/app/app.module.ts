@@ -34,18 +34,9 @@ import {MtgService} from './mtg/mtg.service';
 
 
 const routes: Routes = [
-    {
-      path: 'comics',
-      component: ListComicsComponent
-    },
-    {
-      path: 'mtg-dashboard',
-      component: MtgDashboardComponent
-    },
-    {
-      path: 'mtg-scry-import',
-      component: ScryImportComponent
-    }
+    {path: 'comics', component: ListComicsComponent},
+    {path: 'mtg-dashboard', component: MtgDashboardComponent},
+    {path: 'mtg-scry-import', component: ScryImportComponent}
   ]
 ;
 

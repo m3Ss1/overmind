@@ -15,3 +15,12 @@
   top: 0;
   z-index: 1;
 }
+
+.my-button-row button, .my-button-row a {
+  margin-right: 8px;
+  text-decoration: none;
+}
+
+.flex-spacer {
+  flex: 1 1 auto;
+}

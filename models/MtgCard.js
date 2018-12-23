@@ -11,6 +11,7 @@ let MtgCard = new Schema({
     arena_id: Number,
     name: String,
     lang: String,
+    released_at: String,
     uri: String,
     scryfall_uri: String,
     layout: String,
@@ -93,6 +94,8 @@ let MtgCard = new Schema({
     collection_count: {type: Number, default: 0},
     in_deck_count: {type: Number, default: 0},
     deck_note: String,
+    purchase_price: Number,
+    gain_loss: Number,
   })
 ;
 

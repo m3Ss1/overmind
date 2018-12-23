@@ -12,9 +12,9 @@ export class MtgDashboardComponent implements OnInit {
 
   mtgSets: Set[] = [];
   selectedSet: Set;
-  mtgCards: Card[] = [];
+  totalGainLoss: number;
 
-  displayedColumns: string[] = ['number', 'rarity', 'name', 'type', 'cost', 'value', 'owned', 'in_deck', 'deck_notes'];
+  displayedColumns: string[] = ['number', 'rarity', 'name', 'type', 'cost', 'value', 'buy_price', 'gain_loss', 'owned', 'in_deck', 'deck_notes'];
   dataSource: MatTableDataSource<Card>;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
@@ -25,7 +25,9 @@ export class MtgDashboardComponent implements OnInit {
       const regex = /({(.*?)}|(\/\/))/gi;
       let m;
       while ((m = regex.exec(card.mana_cost)) !== null) {
-        if (m.index === regex.lastIndex) { regex.lastIndex++; }
+        if (m.index === regex.lastIndex) {
+          regex.lastIndex++;
+        }
 
         if (m[0] === '//') {
           // special double/split cards
@@ -36,6 +38,15 @@ export class MtgDashboardComponent implements OnInit {
           card.mana_cost_display.push(styleItem.toLowerCase());
         }
       }
+    }
+  }
+
+  private static updateGainLossValue(card: Card) {
+    /* Update gain/loss price */
+    if (card.eur && card.purchase_price && card.collection_count > 0) {
+      card.gain_loss = (Number(card.eur) - card.purchase_price) * card.collection_count;
+    } else {
+      card.gain_loss = 0;
     }
   }
 
@@ -54,8 +65,19 @@ export class MtgDashboardComponent implements OnInit {
     );
   }
 
+  recalculateTotalGainLoss() {
+    let tot = 0;
+    if (this.dataSource && this.dataSource.data) {
+      for (const mtgCard of this.dataSource.data) {
+        if (!isNaN(mtgCard.gain_loss)) {
+          tot += mtgCard.gain_loss;
+        }
+      }
+    }
+    this.totalGainLoss = tot;
+  }
+
   reset() {
-    this.mtgCards = null;
     this.selectedSet = null;
     this.dataSource = null;
     this.paginator = null;
@@ -68,6 +90,31 @@ export class MtgDashboardComponent implements OnInit {
         MtgDashboardComponent.populateManaCostDisplay(cards);
         this.dataSource = new MatTableDataSource<Card>(cards);
         this.dataSource.paginator = this.paginator;
+        this.recalculateTotalGainLoss();
+      }
+    );
+  }
+
+  getAllCards() {
+    this.selectedSet = null;
+    this.mtgService.getAllCards().subscribe(
+      cards => {
+        MtgDashboardComponent.populateManaCostDisplay(cards);
+        this.dataSource = new MatTableDataSource<Card>(cards);
+        this.dataSource.paginator = this.paginator;
+        this.recalculateTotalGainLoss();
+      }
+    );
+  }
+
+  getMissingCards() {
+    this.selectedSet = null;
+    this.mtgService.getMissingCards().subscribe(
+      cards => {
+        MtgDashboardComponent.populateManaCostDisplay(cards);
+        this.dataSource = new MatTableDataSource<Card>(cards);
+        this.dataSource.paginator = this.paginator;
+        this.recalculateTotalGainLoss();
       }
     );
   }
@@ -83,6 +130,8 @@ export class MtgDashboardComponent implements OnInit {
 
   increaseOwnedByOne(card: Card) {
     card.collection_count++;
+    MtgDashboardComponent.updateGainLossValue(card);
+    this.recalculateTotalGainLoss();
     this.mtgService.updateCard(card).subscribe();
   }
 
@@ -94,6 +143,8 @@ export class MtgDashboardComponent implements OnInit {
     if (card.in_deck_count > card.collection_count) {
       card.in_deck_count--;
     }
+    MtgDashboardComponent.updateGainLossValue(card);
+    this.recalculateTotalGainLoss();
     this.mtgService.updateCard(card).subscribe();
   }
 
@@ -114,7 +165,9 @@ export class MtgDashboardComponent implements OnInit {
     this.mtgService.updateCard(card).subscribe();
   }
 
-  storeDeckNote(card: Card) {
+  updateCard(card: Card) {
+    MtgDashboardComponent.updateGainLossValue(card);
+    this.recalculateTotalGainLoss();
     this.mtgService.updateCard(card).subscribe();
   }
 

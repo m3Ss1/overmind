@@ -50,6 +50,7 @@ declare module 'mtg-interfaces' {
     arena_id: number;
     name: string;
     lang: string;
+    released_at: string;
     uri: string;
     scryfall_uri: string;
     layout: string;
@@ -100,6 +101,8 @@ declare module 'mtg-interfaces' {
     in_deck_count: number;
     deck_note: number;
     mana_cost_display: string[];
+    purchase_price: number;
+    gain_loss: number;
   }
 
   export interface Set {
