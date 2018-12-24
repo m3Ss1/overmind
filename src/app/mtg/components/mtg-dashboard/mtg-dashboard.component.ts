@@ -2,6 +2,7 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {Card, Set} from 'mtg-interfaces';
 import {MtgService} from '../../mtg.service';
 import {MatPaginator, MatTableDataSource} from '@angular/material';
+import {Constants} from '../../../constants';
 
 @Component({
   selector: 'app-mtg-dashboard',
@@ -13,6 +14,7 @@ export class MtgDashboardComponent implements OnInit {
   mtgSets: Set[] = [];
   selectedSet: Set;
   totalGainLoss: number;
+  readonly EUR_TO_CHF_FX = Constants.EUR_TO_CHF_FX;
 
   displayedColumns: string[] = ['number', 'rarity', 'name', 'type', 'cost', 'value', 'buy_price', 'gain_loss', 'owned', 'in_deck', 'deck_notes'];
   dataSource: MatTableDataSource<Card>;
@@ -44,7 +46,7 @@ export class MtgDashboardComponent implements OnInit {
   private static updateGainLossValue(card: Card) {
     /* Update gain/loss price */
     if (card.eur && card.purchase_price && card.collection_count > 0) {
-      card.gain_loss = (Number(card.eur) - card.purchase_price) * card.collection_count;
+      card.gain_loss = ((Number(card.eur) * Constants.EUR_TO_CHF_FX) - card.purchase_price) * card.collection_count;
     } else {
       card.gain_loss = 0;
     }

@@ -42,12 +42,12 @@
 
   <!-- Selected Set Title -->
   <mat-grid-tile [colspan]="4" [rowspan]="1" *ngIf="selectedSet">
-    <h3>
+    <h5>
       <span class="ss ss-{{selectedSet.code}} ss-fw ss-2x mr-2"></span>
-      {{selectedSet.name}} <span class="font-12">({{selectedSet.code.toUpperCase()}} / {{selectedSet.released_at | date:'MMMM y'}}
+      {{selectedSet.name}} <span class="font-12">({{selectedSet.released_at | date:'MMMM y'}}
       / {{selectedSet.card_count}})</span>
       <i class="font-12 fas fa-trash pointer my-list-group-item ml-1" (click)="deleteSetAndCards(selectedSet.code)"></i>
-    </h3>
+    </h5>
   </mat-grid-tile>
 
   <!-- Global Filter -->
@@ -107,8 +107,8 @@
 
     <!-- Current value column -->
     <ng-container matColumnDef="value">
-      <th mat-header-cell *matHeaderCellDef class="wid-50"><i class="material-icons">euro_symbol</i></th>
-      <td mat-cell *matCellDef="let card">{{card.eur | number:'1.0-2'}}</td>
+      <th mat-header-cell *matHeaderCellDef class="wid-50">CHF</th>
+      <td mat-cell *matCellDef="let card">{{card.eur * EUR_TO_CHF_FX | number:'1.0-2'}}</td>
       <td mat-footer-cell *matFooterCellDef></td>
     </ng-container>
 
@@ -127,10 +127,10 @@
     <ng-container matColumnDef="gain_loss">
       <th mat-header-cell *matHeaderCellDef class="wid-50">Gain/Loss</th>
       <td mat-cell *matCellDef="let card" [ngClass]="{'red': card.gain_loss < 0, 'green': card.gain_loss > 0}">
-        {{card.gain_loss | number:'1.0-2'}} €
+        {{card.gain_loss | number:'1.0-2'}}
       </td>
       <td mat-footer-cell *matFooterCellDef [ngClass]="{'red': totalGainLoss < 0, 'green': totalGainLoss > 0}">
-        {{totalGainLoss | number:'1.0-2'}} €
+        {{totalGainLoss | number:'1.0-2'}}
       </td>
     </ng-container>
 
