@@ -3,11 +3,11 @@
   <!-- All Sets -->
   <mat-grid-tile [colspan]="10" [rowspan]="1">
     <mat-chip-list [selectable]="true">
-      <mat-chip (click)="getAllCards(); chipAll.select()" #chipAll="matChip" color="accent">
-        <span class="pointer"><mat-icon>all_inclusive</mat-icon></span>
+      <mat-chip (click)="getAllCards(); chipAll.select()" #chipAll="matChip" color="accent" class="pointer">
+        <mat-icon>apps</mat-icon>
       </mat-chip>
-      <mat-chip (click)="getMissingCards(); chipMiss.select()" #chipMiss="matChip" color="accent">
-        <span class="pointer"><mat-icon>clear</mat-icon></span>
+      <mat-chip (click)="getMissingCards(); chipMiss.select()" #chipMiss="matChip" color="accent" class="pointer">
+        <mat-icon>search</mat-icon>
       </mat-chip>
       <mat-chip *ngFor="let mtgSet of mtgSets" (click)="getCardsBySet(mtgSet); chip.select()" #chip="matChip" color="accent" class="pointer">
         <span class="ss ss-{{mtgSet.code}} font-18 ss-fw"></span>
@@ -16,22 +16,44 @@
     </mat-chip-list>
   </mat-grid-tile>
 
-  <!-- Selected Set Title -->
-  <mat-grid-tile [colspan]="8" [rowspan]="1" *ngIf="selectedSet">
-    <div>
-      <h3>
-        <span class="ss ss-{{selectedSet.code}} ss-fw ss-2x mr-2"></span>
-        {{selectedSet.name}} <span class="font-12">({{selectedSet.code.toUpperCase()}} / {{selectedSet.released_at | date:'MMMM y'}}
-        / {{selectedSet.card_count}})</span>
-        <i class="font-12 fas fa-trash pointer my-list-group-item ml-1" (click)="deleteSetAndCards(selectedSet.code)"></i>
-      </h3>
+  <!-- Global Actions -->
+  <mat-grid-tile [colspan]="3" [rowspan]="1" *ngIf="selectedSet">
+
+    <mat-form-field class="wid-150">
+      <input matInput type="text" placeholder="Update all prices" [(ngModel)]="value">
+      <button mat-button *ngIf="value" matSuffix mat-icon-button aria-label="Clear" (click)="value=null">
+        <mat-icon>close</mat-icon>
+      </button>
+      <button mat-button matSuffix mat-icon-button aria-label="Apply" (click)="modifyAllBuyPrice(value); value=null">
+        <mat-icon>check</mat-icon>
+      </button>
+    </mat-form-field>
+
+    <div class="ml-3">
+      Owned:
+      <button mat-icon-button (click)="decreaseAllOwnedByOne()">
+        <mat-icon>exposure_neg_1</mat-icon>
+      </button>
+      <button mat-icon-button (click)="increaseAllOwnedByOne()">
+        <mat-icon>exposure_plus_1</mat-icon>
+      </button>
     </div>
   </mat-grid-tile>
 
+  <!-- Selected Set Title -->
+  <mat-grid-tile [colspan]="4" [rowspan]="1" *ngIf="selectedSet">
+    <h3>
+      <span class="ss ss-{{selectedSet.code}} ss-fw ss-2x mr-2"></span>
+      {{selectedSet.name}} <span class="font-12">({{selectedSet.code.toUpperCase()}} / {{selectedSet.released_at | date:'MMMM y'}}
+      / {{selectedSet.card_count}})</span>
+      <i class="font-12 fas fa-trash pointer my-list-group-item ml-1" (click)="deleteSetAndCards(selectedSet.code)"></i>
+    </h3>
+  </mat-grid-tile>
+
   <!-- Global Filter -->
-  <mat-grid-tile [colspan]="2" [rowspan]="1" *ngIf="selectedSet">
+  <mat-grid-tile [colspan]="3" [rowspan]="1" *ngIf="selectedSet">
     <mat-form-field appearance="standard">
-      <mat-label>Global Filter</mat-label>
+      <mat-label>Filter</mat-label>
       <input matInput (keyup)="applyFilter($event.target.value)" placeholder="">
     </mat-form-field>
   </mat-grid-tile>
@@ -98,7 +120,7 @@
           <input matInput (change)="updateCard(card)" placeholder="" [(ngModel)]="card.purchase_price">
         </mat-form-field>
       </td>
-      <td mat-footer-cell *matFooterCellDef> Total </td>
+      <td mat-footer-cell *matFooterCellDef> Total</td>
     </ng-container>
 
     <!-- Gain/Loss column -->
@@ -117,11 +139,11 @@
       <th mat-header-cell *matHeaderCellDef class="spinner-column">Owned</th>
       <td mat-cell *matCellDef="let card">
         <button type="button" mat-icon-button (click)="decreaseOwnedByOne(card)">
-          <mat-icon>arrow_drop_down</mat-icon>
+          <mat-icon>arrow_left</mat-icon>
         </button>
         <b class="font-20">{{card.collection_count}}</b>
         <button type="button" mat-icon-button (click)="increaseOwnedByOne(card)">
-          <mat-icon>arrow_drop_up</mat-icon>
+          <mat-icon>arrow_right</mat-icon>
         </button>
       </td>
       <td mat-footer-cell *matFooterCellDef></td>
@@ -132,11 +154,11 @@
       <th mat-header-cell *matHeaderCellDef class="spinner-column">In Deck</th>
       <td mat-cell *matCellDef="let card">
         <button type="button" mat-icon-button (click)="decreaseInDeckByOne(card)">
-          <mat-icon>arrow_drop_down</mat-icon>
+          <mat-icon>arrow_left</mat-icon>
         </button>
         <b class="font-20">{{card.in_deck_count}}</b>
         <button type="button" mat-icon-button (click)="increaseInDeckByOne(card)">
-          <mat-icon>arrow_drop_up</mat-icon>
+          <mat-icon>arrow_right</mat-icon>
         </button>
       </td>
       <td mat-footer-cell *matFooterCellDef></td>

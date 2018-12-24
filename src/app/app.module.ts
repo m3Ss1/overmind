@@ -6,6 +6,7 @@ import {RouterModule, Routes} from '@angular/router';
 import {HttpClientModule} from '@angular/common/http';
 import {FormsModule} from '@angular/forms';
 import {
+  MatBadgeModule,
   MatButtonModule,
   MatChipsModule,
   MatFormFieldModule,
@@ -67,7 +68,8 @@ const routes: Routes = [
     MatSelectModule,
     MatGridListModule,
     MatChipsModule,
-    LayoutModule
+    LayoutModule,
+    MatBadgeModule
   ],
   providers: [
     ComicsService,

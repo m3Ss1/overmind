@@ -38,6 +38,10 @@ table {
   width: 50px;
 }
 
+.wid-150 {
+  width: 150px;
+}
+
 .spinner-column {
   width: 100px;
   text-align: center;

@@ -175,4 +175,28 @@ export class MtgDashboardComponent implements OnInit {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
+  modifyAllBuyPrice(inputValue: number) {
+    if (this.dataSource && this.dataSource.data) {
+      for (const mtgCard of this.dataSource.data) {
+        mtgCard.purchase_price = inputValue;
+        this.updateCard(mtgCard);
+      }
+    }
+  }
+
+  increaseAllOwnedByOne() {
+    if (this.dataSource && this.dataSource.data) {
+      for (const mtgCard of this.dataSource.data) {
+        this.increaseOwnedByOne(mtgCard);
+      }
+    }
+  }
+
+  decreaseAllOwnedByOne() {
+    if (this.dataSource && this.dataSource.data) {
+      for (const mtgCard of this.dataSource.data) {
+        this.decreaseOwnedByOne(mtgCard);
+      }
+    }
+  }
 }
