@@ -355,16 +355,16 @@ MIT
 
 @angular/material/tooltip
 
+@angular/material/button
+
+@angular/material/icon
+
 @angular/material/grid-list
 
 @angular/material/form-field
 
 @angular/forms
 MIT
-
-@angular/material/button
-
-@angular/material/icon
 
 @angular/material/table
 
