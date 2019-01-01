@@ -9,6 +9,7 @@ import {
   MatBadgeModule,
   MatButtonModule,
   MatChipsModule,
+  MatDialogModule,
   MatFormFieldModule,
   MatGridListModule,
   MatIconModule,
@@ -30,7 +31,7 @@ import {AppComponent} from './app.component';
 import {ListComicsComponent} from './comics/components/list-comics/list-comics.component';
 import {ComicsService} from './comics/comics.service';
 import {ScryImportComponent} from './mtg/components/scry-import/scry-import.component';
-import {MtgDashboardComponent} from './mtg/components/mtg-dashboard/mtg-dashboard.component';
+import {CardImageDialogComponent, MtgDashboardComponent} from './mtg/components/mtg-dashboard/mtg-dashboard.component';
 import {MtgService} from './mtg/mtg.service';
 
 
@@ -46,7 +47,8 @@ const routes: Routes = [
     AppComponent,
     ListComicsComponent,
     ScryImportComponent,
-    MtgDashboardComponent
+    MtgDashboardComponent,
+    CardImageDialogComponent
   ],
   imports: [
     RouterModule.forRoot(routes),
@@ -68,14 +70,16 @@ const routes: Routes = [
     MatSelectModule,
     MatGridListModule,
     MatChipsModule,
-    LayoutModule,
-    MatBadgeModule
+    MatDialogModule,
+    MatBadgeModule,
+    LayoutModule
   ],
   providers: [
     ComicsService,
     MtgService
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [CardImageDialogComponent]
 })
 
 export class AppModule {

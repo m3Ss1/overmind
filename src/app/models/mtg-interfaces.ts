@@ -99,7 +99,7 @@ declare module 'mtg-interfaces' {
     display_number: number; /* storing cards in order to avoid complex parsing of collection_number (e.g. ZEN/230a) */
     collection_count: number;
     in_deck_count: number;
-    deck_note: number;
+    deck_note: string;
     mana_cost_display: string[];
     purchase_price: number;
     gain_loss: number;

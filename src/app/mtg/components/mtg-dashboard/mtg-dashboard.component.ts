@@ -1,7 +1,7 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, Inject, OnInit, ViewChild} from '@angular/core';
 import {Card, Set} from 'mtg-interfaces';
 import {MtgService} from '../../mtg.service';
-import {MatPaginator, MatTableDataSource} from '@angular/material';
+import {MAT_DIALOG_DATA, MatDialog, MatDialogRef, MatPaginator, MatTableDataSource} from '@angular/material';
 import {Constants} from '../../../constants';
 
 @Component({
@@ -52,7 +52,7 @@ export class MtgDashboardComponent implements OnInit {
     }
   }
 
-  constructor(private mtgService: MtgService) {
+  constructor(private mtgService: MtgService, public dialog: MatDialog) {
   }
 
   ngOnInit() {
@@ -71,6 +71,7 @@ export class MtgDashboardComponent implements OnInit {
     let tot = 0;
     if (this.dataSource && this.dataSource.data) {
       for (const mtgCard of this.dataSource.data) {
+        MtgDashboardComponent.updateGainLossValue(mtgCard);
         if (!isNaN(mtgCard.gain_loss)) {
           tot += mtgCard.gain_loss;
         }
@@ -132,7 +133,6 @@ export class MtgDashboardComponent implements OnInit {
 
   increaseOwnedByOne(card: Card) {
     card.collection_count++;
-    MtgDashboardComponent.updateGainLossValue(card);
     this.recalculateTotalGainLoss();
     this.mtgService.updateCard(card).subscribe();
   }
@@ -145,7 +145,6 @@ export class MtgDashboardComponent implements OnInit {
     if (card.in_deck_count > card.collection_count) {
       card.in_deck_count--;
     }
-    MtgDashboardComponent.updateGainLossValue(card);
     this.recalculateTotalGainLoss();
     this.mtgService.updateCard(card).subscribe();
   }
@@ -168,7 +167,6 @@ export class MtgDashboardComponent implements OnInit {
   }
 
   updateCard(card: Card) {
-    MtgDashboardComponent.updateGainLossValue(card);
     this.recalculateTotalGainLoss();
     this.mtgService.updateCard(card).subscribe();
   }
@@ -201,4 +199,18 @@ export class MtgDashboardComponent implements OnInit {
       }
     }
   }
+
+  openDialog(imageUri: string) {
+    this.dialog.open(CardImageDialogComponent, {data: {imageUri: imageUri}});
+  }
+}
+
+@Component({
+  selector: 'app-mtg-dashboard-dialog',
+  template: '<img alt="" src="{{data.imageUri}}"/>',
+})
+export class CardImageDialogComponent {
+
+  constructor(public dialogRef: MatDialogRef<CardImageDialogComponent>, @Inject(MAT_DIALOG_DATA) public data: any) {}
+
 }

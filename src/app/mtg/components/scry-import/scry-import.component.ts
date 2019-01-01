@@ -22,6 +22,8 @@ export class ScryImportComponent implements OnInit {
 
   fetch(code: string, page: number = 1, displayNumber: number = 1) {
 
+    code = code.trim().toLowerCase();
+
     // first step, retrieve set information (only once)
     if (!this.set) {
       this.mtgService.fetchSet(code).subscribe(
