@@ -88,6 +88,21 @@ let MtgCard = new Schema({
       mtgo_traders: String,
       coolstuffinc: String
     },
+    card_faces: [{
+      object: String,
+      name: String,
+      mana_cost: String,
+      type_line: String,
+      illustration_id: String,
+      image_uris: {
+        small: String,
+        normal: String,
+        large: String,
+        png: String,
+        art_crop: String,
+        border_crop: String
+      }
+    }],
 
     /* personal fields */
     display_number: Number, /* storing cards in order to avoid complex parsing of collection_number (e.g. ZEN/230a) */

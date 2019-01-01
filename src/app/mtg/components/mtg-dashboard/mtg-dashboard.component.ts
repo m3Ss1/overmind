@@ -122,6 +122,17 @@ export class MtgDashboardComponent implements OnInit {
     );
   }
 
+  getTokens() {
+    this.selectedSet = null;
+    this.mtgService.getTokens().subscribe(
+      cards => {
+        this.dataSource = new MatTableDataSource<Card>(cards);
+        this.dataSource.paginator = this.paginator;
+        this.recalculateTotalGainLoss();
+      }
+    );
+  }
+
   deleteSetAndCards(setCode: string) {
     this.mtgService.deleteCardsBySetCode(setCode).subscribe(cardsDeleteStatus =>
       this.mtgService.deleteSetByCode(setCode).subscribe(setDeleteStatus => {
@@ -200,17 +211,26 @@ export class MtgDashboardComponent implements OnInit {
     }
   }
 
-  openDialog(imageUri: string) {
-    this.dialog.open(CardImageDialogComponent, {data: {imageUri: imageUri}});
+  openDialog(card: Card) {
+    const imageUris = [];
+    if (card.image_uris) {
+      imageUris.push(card.image_uris.border_crop);
+    } else if (card.card_faces && card.card_faces.length > 0) {
+      for (const cardFace of card.card_faces) {
+        imageUris.push(cardFace.image_uris.border_crop);
+      }
+    }
+    this.dialog.open(CardImageDialogComponent, {data: imageUris});
   }
 }
 
 @Component({
   selector: 'app-mtg-dashboard-dialog',
-  template: '<img alt="" src="{{data.imageUri}}"/>',
+  template: '<div class="display: flex"><img *ngFor="let imageUri of data" alt="" src="{{imageUri}}"/></div>',
 })
 export class CardImageDialogComponent {
 
-  constructor(public dialogRef: MatDialogRef<CardImageDialogComponent>, @Inject(MAT_DIALOG_DATA) public data: any) {}
+  constructor(public dialogRef: MatDialogRef<CardImageDialogComponent>, @Inject(MAT_DIALOG_DATA) public data: string[]) {
+  }
 
 }

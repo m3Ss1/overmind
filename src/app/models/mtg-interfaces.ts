@@ -8,6 +8,15 @@ declare module 'mtg-interfaces' {
     border_crop: string;
   }
 
+  export interface CardFaces {
+    object: string;
+    name: string;
+    mana_cost: string;
+    type_line: string;
+    illustration_id: string;
+    image_uris: ImageUris;
+  }
+
   export interface Legalities {
     standard: string;
     future: string;
@@ -56,6 +65,7 @@ declare module 'mtg-interfaces' {
     layout: string;
     highres_image: boolean;
     image_uris: ImageUris;
+    card_faces: CardFaces[];
     mana_cost: string;
     cmc: number;
     type_line: string;

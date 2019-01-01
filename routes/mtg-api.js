@@ -27,7 +27,9 @@ router.post('/set/add', function (req, res) {
 
 /* GET all sets */
 router.get('/set/all', function (req, res) {
-  MtgSet.find(function (err, sets) {
+  MtgSet.find({
+    $where: 'this.code.length == 3'
+  }, function (err, sets) {
     if (err) res.send(err);
     res.send(sets);
   }).sort([['released_at', -1]]);
@@ -35,7 +37,9 @@ router.get('/set/all', function (req, res) {
 
 /* GET all cards */
 router.get('/card/all', function (req, res) {
-  MtgCard.find(function (err, comics) {
+  MtgCard.find({
+    $where: 'this.set.length == 3'
+  }, function (err, comics) {
     if (err) res.send(err);
     res.send(comics);
   }).sort({'released_at': -1, 'set': 1, 'display_number': 1});
@@ -44,7 +48,20 @@ router.get('/card/all', function (req, res) {
 /* GET missing cards */
 router.get('/card/missing', function (req, res) {
   MtgCard.find({
-    $or: [{collection_count: 0}, {collection_count: null}, {collection_count: {$exists: false}}]
+    $and: [
+      {$where: 'this.set.length == 3'},
+      {$or: [{collection_count: 0}, {collection_count: null}, {collection_count: {$exists: false}}]}
+    ]
+  }, function (err, comics) {
+    if (err) res.send(err);
+    res.send(comics);
+  }).sort({'released_at': -1, 'set': 1, 'display_number': 1});
+});
+
+/* GET tokens */
+router.get('/card/tokens', function (req, res) {
+  MtgCard.find({
+    $where: 'this.set.length == 4'
   }, function (err, comics) {
     if (err) res.send(err);
     res.send(comics);
