@@ -14,6 +14,7 @@ export class MtgDashboardComponent implements OnInit {
   mtgSets: Set[] = [];
   selectedSet: Set;
   totalGainLoss: number;
+  manualUpdateValue: number;
   readonly EUR_TO_CHF_FX = Constants.EUR_TO_CHF_FX;
 
   displayedColumns: string[] = ['number', 'rarity', 'name', 'type', 'cost', 'value', 'buy_price', 'gain_loss', 'owned', 'in_deck', 'deck_notes'];

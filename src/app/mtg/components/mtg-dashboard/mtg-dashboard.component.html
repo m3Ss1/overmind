@@ -26,11 +26,11 @@
   <mat-grid-tile [colspan]="3" [rowspan]="1">
 
     <mat-form-field class="wid-150">
-      <input matInput type="text" placeholder="Update all prices" [(ngModel)]="value">
-      <button mat-button *ngIf="value" matSuffix mat-icon-button aria-label="Clear" (click)="value=null">
+      <input matInput type="text" placeholder="Update all prices" [(ngModel)]="manualUpdateValue">
+      <button mat-button *ngIf="manualUpdateValue" matSuffix mat-icon-button aria-label="Clear" (click)="manualUpdateValue=null">
         <mat-icon>close</mat-icon>
       </button>
-      <button mat-button matSuffix mat-icon-button aria-label="Apply" (click)="modifyAllBuyPrice(value); value=null">
+      <button mat-button matSuffix mat-icon-button aria-label="Apply" (click)="modifyAllBuyPrice(manualUpdateValue); manualUpdateValue=null">
         <mat-icon>check</mat-icon>
       </button>
     </mat-form-field>
