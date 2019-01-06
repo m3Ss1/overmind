@@ -1,17 +1,23 @@
-<mat-sidenav-container class="sidenav-container">
-  <mat-sidenav-content>
-    <mat-toolbar color="primary">
-      <span>overmind</span>
-      <span class="flex-spacer"></span>
-      <div class="my-button-row">
-        <a mat-raised-button routerLink="comics">Comics</a>
-        <a mat-raised-button routerLink="mtg-dashboard">MTG Collection</a>
-        <a mat-raised-button routerLink="mtg-scry-import">MTG Scry-Import</a>
-      </div>
-    </mat-toolbar>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+  <a class="navbar-brand" href="/">Overmind</a>
 
-    <!-- REAL PAGE CONTENT -->
-    <router-outlet></router-outlet>
+  <div class="navbar-nav" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
 
-  </mat-sidenav-content>
-</mat-sidenav-container>
+      <li class="nav-item"><a routerLink="comics" class="nav-link" routerLinkActive="active">Comics</a></li>
+
+      <li class="nav-item dropdown">
+        <div ngbDropdown class="d-inline-block">
+          <a class="nav-link dropdown-toggle" style="cursor: pointer" id="mtgDropdown" ngbDropdownToggle>MTG</a>
+          <div ngbDropdownMenu aria-labelledby="mtgDropdown">
+            <a routerLink="mtg-dashboard" class="dropdown-item">Collection</a>
+            <a routerLink="mtg-scry-import" class="dropdown-item">Scryfall import</a>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<!-- REAL PAGE CONTENT -->
+<router-outlet></router-outlet>

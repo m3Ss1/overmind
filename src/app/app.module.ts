@@ -5,34 +5,15 @@ import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {HttpClientModule} from '@angular/common/http';
 import {FormsModule} from '@angular/forms';
-import {
-  MatBadgeModule,
-  MatButtonModule,
-  MatChipsModule,
-  MatDialogModule,
-  MatFormFieldModule,
-  MatGridListModule,
-  MatIconModule,
-  MatInputModule,
-  MatListModule,
-  MatMenuModule,
-  MatOptionModule,
-  MatPaginatorModule,
-  MatSelectModule,
-  MatSidenavModule,
-  MatTableModule,
-  MatToolbarModule
-} from '@angular/material';
 import 'hammerjs';
-import {LayoutModule} from '@angular/cdk/layout';
-// 3rd party
 // App
 import {AppComponent} from './app.component';
 import {ListComicsComponent} from './comics/components/list-comics/list-comics.component';
 import {ComicsService} from './comics/comics.service';
 import {ScryImportComponent} from './mtg/components/scry-import/scry-import.component';
-import {CardImageDialogComponent, MtgDashboardComponent} from './mtg/components/mtg-dashboard/mtg-dashboard.component';
+import {MtgDashboardComponent, MtgImgModalContentComponent} from './mtg/components/mtg-dashboard/mtg-dashboard.component';
 import {MtgService} from './mtg/mtg.service';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 
 
 const routes: Routes = [
@@ -48,7 +29,7 @@ const routes: Routes = [
     ListComicsComponent,
     ScryImportComponent,
     MtgDashboardComponent,
-    CardImageDialogComponent
+    MtgImgModalContentComponent
   ],
   imports: [
     RouterModule.forRoot(routes),
@@ -56,30 +37,14 @@ const routes: Routes = [
     BrowserAnimationsModule,
     FormsModule,
     HttpClientModule,
-    MatInputModule,
-    MatTableModule,
-    MatPaginatorModule,
-    MatToolbarModule,
-    MatMenuModule,
-    MatSidenavModule,
-    MatListModule,
-    MatIconModule,
-    MatButtonModule,
-    MatFormFieldModule,
-    MatOptionModule,
-    MatSelectModule,
-    MatGridListModule,
-    MatChipsModule,
-    MatDialogModule,
-    MatBadgeModule,
-    LayoutModule
+    NgbModule
   ],
   providers: [
     ComicsService,
     MtgService
   ],
   bootstrap: [AppComponent],
-  entryComponents: [CardImageDialogComponent]
+  entryComponents: [MtgImgModalContentComponent]
 })
 
 export class AppModule {

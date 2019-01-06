@@ -1,8 +1,8 @@
-import {Component, Inject, OnInit, ViewChild} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {Card, Set} from 'mtg-interfaces';
 import {MtgService} from '../../mtg.service';
-import {MAT_DIALOG_DATA, MatDialog, MatDialogRef, MatPaginator, MatTableDataSource} from '@angular/material';
 import {Constants} from '../../../constants';
+import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-mtg-dashboard',
@@ -11,15 +11,18 @@ import {Constants} from '../../../constants';
 })
 export class MtgDashboardComponent implements OnInit {
 
+  readonly EUR_TO_CHF_FX = Constants.EUR_TO_CHF_FX;
+  readonly TRIM_LENGTH = Constants.TRIM_LENGTH;
+
   mtgSets: Set[] = [];
   selectedSet: Set;
-  totalGainLoss: number;
-  manualUpdateValue: number;
-  readonly EUR_TO_CHF_FX = Constants.EUR_TO_CHF_FX;
+  selectedCards: Card[];
 
-  displayedColumns: string[] = ['number', 'rarity', 'name', 'type', 'cost', 'value', 'buy_price', 'gain_loss', 'owned', 'in_deck', 'deck_notes'];
-  dataSource: MatTableDataSource<Card>;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  totalSetCost: number;
+  totalBuyPrice: number;
+  totalGainLoss: number;
+  totalOwnedCards: number;
+  totalInDeckCards: number;
 
   private static populateManaCostDisplay(cards: Card[]) {
     for (const card of cards) {
@@ -53,7 +56,19 @@ export class MtgDashboardComponent implements OnInit {
     }
   }
 
-  constructor(private mtgService: MtgService, public dialog: MatDialog) {
+  private static extractImageUris(card: Card): string[] {
+    const imageUris = [];
+    if (card.image_uris) {
+      imageUris.push(card.image_uris.border_crop);
+    } else if (card.card_faces && card.card_faces.length > 0) {
+      for (const cardFace of card.card_faces) {
+        imageUris.push(cardFace.image_uris.border_crop);
+      }
+    }
+    return imageUris;
+  }
+
+  constructor(private mtgService: MtgService, private modalService: NgbModal) {
   }
 
   ngOnInit() {
@@ -61,82 +76,100 @@ export class MtgDashboardComponent implements OnInit {
   }
 
   private refresh() {
-    this.mtgService.getAllSets().subscribe(
-      sets => {
+    this.mtgService.getAllSets().subscribe(sets => {
         this.mtgSets = sets;
-      }
-    );
+    });
   }
 
-  recalculateTotalGainLoss() {
-    let tot = 0;
-    if (this.dataSource && this.dataSource.data) {
-      for (const mtgCard of this.dataSource.data) {
-        MtgDashboardComponent.updateGainLossValue(mtgCard);
-        if (!isNaN(mtgCard.gain_loss)) {
-          tot += mtgCard.gain_loss;
+  recalculateTotals() {
+    this.totalSetCost = 0;
+    this.totalBuyPrice = 0;
+    this.totalGainLoss = 0;
+    this.totalOwnedCards = 0;
+    this.totalInDeckCards = 0;
+
+    if (this.selectedCards) {
+      for (const card of this.selectedCards) {
+
+        if (card.eur != null) {
+          this.totalSetCost += Number(card.eur);
+        }
+
+        if (card.purchase_price != null) {
+          this.totalBuyPrice += Number(card.purchase_price);
+        }
+
+        MtgDashboardComponent.updateGainLossValue(card);
+        if (card.gain_loss != null) {
+          this.totalGainLoss += Number(card.gain_loss);
+        }
+
+        if (card.collection_count != null) {
+          this.totalOwnedCards += Number(card.collection_count);
+        }
+
+        if (card.in_deck_count != null) {
+          this.totalInDeckCards += Number(card.in_deck_count);
         }
       }
     }
-    this.totalGainLoss = tot;
   }
 
   reset() {
     this.selectedSet = null;
-    this.dataSource = null;
-    this.paginator = null;
+    this.selectedCards = null;
   }
 
   getCardsBySet(set: Set) {
     this.selectedSet = set;
+    this.selectedCards = null;
     this.mtgService.getCardsBySet(set.code).subscribe(
       cards => {
         MtgDashboardComponent.populateManaCostDisplay(cards);
-        this.dataSource = new MatTableDataSource<Card>(cards);
-        this.dataSource.paginator = this.paginator;
-        this.recalculateTotalGainLoss();
+        this.selectedCards = cards;
+        this.recalculateTotals();
       }
     );
   }
 
   getAllCards() {
     this.selectedSet = null;
+    this.selectedCards = null;
     this.mtgService.getAllCards().subscribe(
       cards => {
         MtgDashboardComponent.populateManaCostDisplay(cards);
-        this.dataSource = new MatTableDataSource<Card>(cards);
-        this.dataSource.paginator = this.paginator;
-        this.recalculateTotalGainLoss();
+        this.selectedCards = cards;
+        this.recalculateTotals();
       }
     );
   }
 
   getMissingCards() {
     this.selectedSet = null;
+    this.selectedCards = null;
     this.mtgService.getMissingCards().subscribe(
       cards => {
         MtgDashboardComponent.populateManaCostDisplay(cards);
-        this.dataSource = new MatTableDataSource<Card>(cards);
-        this.dataSource.paginator = this.paginator;
-        this.recalculateTotalGainLoss();
+        this.selectedCards = cards;
+        this.recalculateTotals();
       }
     );
   }
 
   getTokens() {
     this.selectedSet = null;
+    this.selectedCards = null;
     this.mtgService.getTokens().subscribe(
       cards => {
-        this.dataSource = new MatTableDataSource<Card>(cards);
-        this.dataSource.paginator = this.paginator;
-        this.recalculateTotalGainLoss();
+        this.selectedCards = cards;
+        this.recalculateTotals();
       }
     );
   }
 
   deleteSetAndCards(setCode: string) {
-    this.mtgService.deleteCardsBySetCode(setCode).subscribe(cardsDeleteStatus =>
-      this.mtgService.deleteSetByCode(setCode).subscribe(setDeleteStatus => {
+    this.mtgService.deleteCardsBySetCode(setCode).subscribe(() =>
+      this.mtgService.deleteSetByCode(setCode).subscribe(() => {
         this.refresh();
         this.selectedSet = null;
       })
@@ -145,7 +178,7 @@ export class MtgDashboardComponent implements OnInit {
 
   increaseOwnedByOne(card: Card) {
     card.collection_count++;
-    this.recalculateTotalGainLoss();
+    this.recalculateTotals();
     this.mtgService.updateCard(card).subscribe();
   }
 
@@ -157,7 +190,7 @@ export class MtgDashboardComponent implements OnInit {
     if (card.in_deck_count > card.collection_count) {
       card.in_deck_count--;
     }
-    this.recalculateTotalGainLoss();
+    this.recalculateTotals();
     this.mtgService.updateCard(card).subscribe();
   }
 
@@ -167,6 +200,7 @@ export class MtgDashboardComponent implements OnInit {
       card.in_deck_count--;
       return;
     }
+    this.recalculateTotals();
     this.mtgService.updateCard(card).subscribe();
   }
 
@@ -175,63 +209,39 @@ export class MtgDashboardComponent implements OnInit {
     if (card.in_deck_count < 0) {
       card.in_deck_count = 0;
     }
+    this.recalculateTotals();
     this.mtgService.updateCard(card).subscribe();
   }
 
   updateCard(card: Card) {
-    this.recalculateTotalGainLoss();
+    this.recalculateTotals();
     this.mtgService.updateCard(card).subscribe();
   }
 
-  applyFilter(filterValue: string) {
-    this.dataSource.filter = filterValue.trim().toLowerCase();
-  }
-
   modifyAllBuyPrice(inputValue: number) {
-    if (this.dataSource && this.dataSource.data) {
-      for (const mtgCard of this.dataSource.data) {
+    if (this.selectedCards) {
+      for (const mtgCard of this.selectedCards) {
         mtgCard.purchase_price = inputValue;
         this.updateCard(mtgCard);
       }
     }
   }
 
-  increaseAllOwnedByOne() {
-    if (this.dataSource && this.dataSource.data) {
-      for (const mtgCard of this.dataSource.data) {
-        this.increaseOwnedByOne(mtgCard);
-      }
-    }
-  }
-
-  decreaseAllOwnedByOne() {
-    if (this.dataSource && this.dataSource.data) {
-      for (const mtgCard of this.dataSource.data) {
-        this.decreaseOwnedByOne(mtgCard);
-      }
-    }
-  }
-
   openDialog(card: Card) {
-    const imageUris = [];
-    if (card.image_uris) {
-      imageUris.push(card.image_uris.border_crop);
-    } else if (card.card_faces && card.card_faces.length > 0) {
-      for (const cardFace of card.card_faces) {
-        imageUris.push(cardFace.image_uris.border_crop);
-      }
-    }
-    this.dialog.open(CardImageDialogComponent, {data: imageUris});
+    const uris = MtgDashboardComponent.extractImageUris(card);
+    let size;
+    uris.length > 1 ? size = '' : size = 'sm';
+    const modalRef = this.modalService.open(MtgImgModalContentComponent, {centered: true, size: size});
+    modalRef.componentInstance.imageUris = uris;
   }
+
 }
 
 @Component({
-  selector: 'app-mtg-dashboard-dialog',
-  template: '<div class="display: flex"><img *ngFor="let imageUri of data" alt="" src="{{imageUri}}"/></div>',
+  selector: 'app-mtg-img-modal-content',
+  template: `<img [ngStyle]="{'width': imageUris.length > 1 ? '249px' : '300px'}" alt="" *ngFor="let imageUri of imageUris" src="{{imageUri}}"/>`
 })
-export class CardImageDialogComponent {
-
-  constructor(public dialogRef: MatDialogRef<CardImageDialogComponent>, @Inject(MAT_DIALOG_DATA) public data: string[]) {
-  }
-
+export class MtgImgModalContentComponent {
+  @Input() imageUris;
+  constructor() {}
 }

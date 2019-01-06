@@ -1,5 +1,10 @@
-.font-bold {
-  font-weight: bold;
+.my-form-style {
+  height: 16px;
+  font-size: 11px;
+}
+
+.font-11 {
+  font-size: 11px;
 }
 
 .font-12 {
@@ -18,33 +23,12 @@
   font-size: 18px;
 }
 
-.font-20 {
-  font-size: 20px;
-}
-
 .pointer {
   cursor: pointer;
 }
 
-table {
-  width: 100%;
-}
-
-.wid-25 {
-  width: 25px;
-}
-
-.wid-50 {
-  width: 50px;
-}
-
-.wid-150 {
-  width: 150px;
-}
-
-.spinner-column {
-  width: 100px;
-  text-align: center;
+.wid-40 {
+  width: 40px;
 }
 
 .red {

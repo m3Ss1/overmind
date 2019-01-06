@@ -99,9 +99,9 @@ declare module 'mtg-interfaces' {
     futureshifted: boolean;
     story_spotlight: boolean;
     edhrec_rank: number;
-    usd: string;
-    tix: string;
-    eur: string;
+    usd: number;
+    tix: number;
+    eur: number;
     related_uris: RelatedUris;
     purchase_uris: PurchaseUris;
 

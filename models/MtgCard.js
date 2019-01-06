@@ -69,9 +69,9 @@ let MtgCard = new Schema({
     futureshifted: Boolean,
     story_spotlight: Boolean,
     edhrec_rank: Number,
-    usd: String,
-    tix: String,
-    eur: String,
+    usd: Number,
+    tix: Number,
+    eur: Number,
     related_uris: {
       gatherer: String,
       tcgplayer_decks: String,
