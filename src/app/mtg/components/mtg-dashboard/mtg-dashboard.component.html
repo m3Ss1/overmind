@@ -6,19 +6,45 @@
     <div class="col-md-2">
       <h3>Card Filter</h3>
       <ul class="list-group">
-        <li class="list-group-item p-0 pointer" (click)=getAllCards()>
-          <i class="fas fa-bars font-16 ml-2 mr-2"></i><span class="font-12">All</span>
+        <li class="list-group-item p-0 border-0">
+          <div class="form-check font-14 ml-2">
+            <input class="form-check-input" [(ngModel)]="showOnlyMissing" type="checkbox" value="" id="onlyMissing">
+            <label class="form-check-label" for="onlyMissing">Show only missing</label>
+          </div>
         </li>
-        <li class="list-group-item p-0 pointer" (click)=getMissingCards()>
-          <i class="fas fa-check font-16 ml-2 mr-2"></i><span class="font-12">Missing</span>
+        <li class="list-group-item p-0 border-0">
+          <div class="form-check form-check-inline font-14 ml-2 mr-1">
+            <input class="form-check-input" [(ngModel)]="selectedRarity" type="radio" name="inlineRadioOptions" id="rarityAll" value="all">
+            <label class="form-check-label" for="rarityAll"><span class="ss ss-bcore ss-timeshifted ss-fw"></span></label>
+          </div>
+          <div class="form-check form-check-inline font-14 mr-1">
+            <input class="form-check-input" [(ngModel)]="selectedRarity" type="radio" name="inlineRadioOptions" id="rarityCommon" value="common">
+            <label class="form-check-label" for="rarityCommon"><span class="ss ss-bcore ss-common ss-fw"></span></label>
+          </div>
+          <div class="form-check form-check-inline font-14 mr-1">
+            <input class="form-check-input" [(ngModel)]="selectedRarity" type="radio" name="inlineRadioOptions" id="rarityUncommon" value="uncommon">
+            <label class="form-check-label" for="rarityUncommon"><span class="ss ss-bcore ss-uncommon ss-fw "></span></label>
+          </div>
+          <div class="form-check form-check-inline font-14 mr-1">
+            <input class="form-check-input" [(ngModel)]="selectedRarity" type="radio" name="inlineRadioOptions" id="rarityRare" value="rare">
+            <label class="form-check-label" for="rarityRare"><span class="ss ss-bcore ss-rare ss-fw"></span></label>
+          </div>
+          <div class="form-check form-check-inline font-14 mr-0">
+            <input class="form-check-input" [(ngModel)]="selectedRarity" type="radio" name="inlineRadioOptions" id="rarityMythic" value="mythic">
+            <label class="form-check-label" for="rarityMythic"><span class="ss ss-bcore ss-mythic ss-fw"></span></label>
+          </div>
+        </li>
+        <li class="list-group-item p-0 pointer" (click)="getCardsFilter({code: 'all', name: 'All Sets'}, selectedRarity, showOnlyMissing)">
+          <i class="fas fa-bars font-16 ml-2 mr-2"></i><span class="font-12">All</span>
         </li>
         <li class="list-group-item p-0 pointer" (click)=getTokens()>
           <i class="fas fa-puzzle-piece font-16 ml-2 mr-2"></i><span class="font-12">Tokens</span>
         </li>
       </ul>
       <ul class="list-group">
-        <li class="list-group-item p-0 pointer" *ngFor="let mtgSet of mtgSets" (click)=getCardsBySet(mtgSet)>
-          <span class="ss ss-{{mtgSet.code}} ss-fw font-18 ml-1 mr-1"></span><span class="font-12">{{mtgSet.name}}</span>
+        <li class="list-group-item p-0 pointer" *ngFor="let mtgSet of mtgSets" (click)="getCardsFilter(mtgSet, selectedRarity, showOnlyMissing)">
+          <span class="ss ss-{{mtgSet.code}} ss-fw ml-2"></span>
+          <span class="font-14">{{mtgSet.name}}</span>
         </li>
       </ul>
     </div>
@@ -27,8 +53,9 @@
     <div class="col-md-10">
       <h5 *ngIf="selectedSet">
         <span class="ss ss-{{selectedSet.code}} ss-fw"></span>
-        {{selectedSet.name}} <span class="font-12">({{selectedSet.released_at | date:'MMMM y'}} / {{selectedSet.card_count}})</span>
-        <i class="font-12 fas fa-trash pointer ml-1" (click)="deleteSetAndCards(selectedSet.code)"></i>
+        {{selectedSet.name}}
+        <span *ngIf="selectedSet.released_at" class="font-12">({{selectedSet.released_at | date:'MMMM y'}} / {{selectedSet.card_count}})</span>
+        <i *ngIf="selectedSet.released_at" class="font-12 fas fa-trash pointer ml-1" (click)="deleteSetAndCards(selectedSet.code)"></i>
       </h5>
       <table class="table table-sm table-hover" *ngIf="selectedCards">
 

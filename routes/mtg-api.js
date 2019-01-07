@@ -35,29 +35,6 @@ router.get('/set/all', function (req, res) {
   }).sort([['released_at', -1]]);
 });
 
-/* GET all cards */
-router.get('/card/all', function (req, res) {
-  MtgCard.find({
-    $where: 'this.set.length == 3'
-  }, function (err, comics) {
-    if (err) res.send(err);
-    res.send(comics);
-  }).sort({'released_at': -1, 'set': 1, 'display_number': 1});
-});
-
-/* GET missing cards */
-router.get('/card/missing', function (req, res) {
-  MtgCard.find({
-    $and: [
-      {$where: 'this.set.length == 3'},
-      {$or: [{collection_count: 0}, {collection_count: null}, {collection_count: {$exists: false}}]}
-    ]
-  }, function (err, comics) {
-    if (err) res.send(err);
-    res.send(comics);
-  }).sort({'released_at': -1, 'set': 1, 'display_number': 1});
-});
-
 /* GET tokens */
 router.get('/card/tokens', function (req, res) {
   MtgCard.find({
@@ -69,13 +46,29 @@ router.get('/card/tokens', function (req, res) {
 });
 
 /* GET cards by set code */
-router.get('/card/bySet/:setCode', function (req, res) {
-  MtgCard.find({
-    set: req.params.setCode
-  }, function (err, comics) {
+router.get('/card/filter/:setCode/:rarity/:onlyMissing', function (req, res) {
+
+  let setCode = req.params.setCode;
+  let rarity = req.params.rarity;
+  let onlyMissing = req.params.onlyMissing;
+
+  let customFilter = {$where: 'this.set.length == 3'};
+  if (setCode !== 'all') {
+    customFilter['set'] = setCode;
+  }
+
+  if (rarity !== 'all') {
+    customFilter['rarity'] = rarity;
+  }
+
+  if (onlyMissing === 'true') {
+    customFilter['$or'] = [{collection_count: 0}, {collection_count: null}, {collection_count: {$exists: false}}];
+  }
+
+  MtgCard.find(customFilter, function (err, comics) {
     if (err) res.send(err);
     res.send(comics);
-  }).sort([['display_number', 1]]);
+  }).sort({'released_at': -1, 'set': 1, 'display_number': 1});
 });
 
 /* UPDATE card */

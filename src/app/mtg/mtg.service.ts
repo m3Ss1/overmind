@@ -43,16 +43,8 @@ export class MtgService {
     return this.http.get<Set[]>(API_URL + '/api/mtg/set/all');
   }
 
-  getAllCards() {
-    return this.http.get<Card[]>(API_URL + '/api/mtg/card/all');
-  }
-
-  getCardsBySet(setCode: string): Observable<Card[]> {
-    return this.http.get<Card[]>(API_URL + '/api/mtg/card/bySet/' + setCode);
-  }
-
-  getMissingCards() {
-    return this.http.get<Card[]>(API_URL + '/api/mtg/card/missing');
+  getCardsFilter(setCode: string, rarity: string, onlyMissing: boolean): Observable<Card[]> {
+    return this.http.get<Card[]>(API_URL + '/api/mtg/card/filter/' + setCode + '/' + rarity + '/' + onlyMissing);
   }
 
   getTokens() {

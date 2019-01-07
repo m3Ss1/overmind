@@ -17,6 +17,8 @@ export class MtgDashboardComponent implements OnInit {
   mtgSets: Set[] = [];
   selectedSet: Set;
   selectedCards: Card[];
+  selectedRarity: String = 'all';
+  showOnlyMissing: Boolean = false;
 
   totalSetCost: number;
   totalBuyPrice: number;
@@ -120,34 +122,10 @@ export class MtgDashboardComponent implements OnInit {
     this.selectedCards = null;
   }
 
-  getCardsBySet(set: Set) {
+  getCardsFilter(set: Set, rarity: string, onlyMissing: boolean) {
     this.selectedSet = set;
     this.selectedCards = null;
-    this.mtgService.getCardsBySet(set.code).subscribe(
-      cards => {
-        MtgDashboardComponent.populateManaCostDisplay(cards);
-        this.selectedCards = cards;
-        this.recalculateTotals();
-      }
-    );
-  }
-
-  getAllCards() {
-    this.selectedSet = null;
-    this.selectedCards = null;
-    this.mtgService.getAllCards().subscribe(
-      cards => {
-        MtgDashboardComponent.populateManaCostDisplay(cards);
-        this.selectedCards = cards;
-        this.recalculateTotals();
-      }
-    );
-  }
-
-  getMissingCards() {
-    this.selectedSet = null;
-    this.selectedCards = null;
-    this.mtgService.getMissingCards().subscribe(
+    this.mtgService.getCardsFilter(set.code, rarity, onlyMissing).subscribe(
       cards => {
         MtgDashboardComponent.populateManaCostDisplay(cards);
         this.selectedCards = cards;
