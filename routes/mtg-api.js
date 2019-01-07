@@ -52,7 +52,7 @@ router.get('/card/filter/:setCode/:rarity/:onlyMissing', function (req, res) {
   let rarity = req.params.rarity;
   let onlyMissing = req.params.onlyMissing;
 
-  let customFilter = {$where: 'this.set.length == 3'};
+  let customFilter = {'$where': 'this.set.length == 3'};
   if (setCode !== 'all') {
     customFilter['set'] = setCode;
   }

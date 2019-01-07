@@ -34,7 +34,7 @@
             <label class="form-check-label" for="rarityMythic"><span class="ss ss-bcore ss-mythic ss-fw"></span></label>
           </div>
         </li>
-        <li class="list-group-item p-0 pointer" (click)="getCardsFilter({code: 'all', name: 'All Sets'}, selectedRarity, showOnlyMissing)">
+        <li class="list-group-item p-0 pointer" (click)="getCardsFilter('all', selectedRarity, showOnlyMissing)">
           <i class="fas fa-bars font-16 ml-2 mr-2"></i><span class="font-12">All</span>
         </li>
         <li class="list-group-item p-0 pointer" (click)=getTokens()>
@@ -42,7 +42,7 @@
         </li>
       </ul>
       <ul class="list-group">
-        <li class="list-group-item p-0 pointer" *ngFor="let mtgSet of mtgSets" (click)="getCardsFilter(mtgSet, selectedRarity, showOnlyMissing)">
+        <li class="list-group-item p-0 pointer" *ngFor="let mtgSet of mtgSets" (click)="getCardsFilter(mtgSet.code, selectedRarity, showOnlyMissing); selectedSet=mtgSet">
           <span class="ss ss-{{mtgSet.code}} ss-fw ml-2"></span>
           <span class="font-14">{{mtgSet.name}}</span>
         </li>
@@ -54,8 +54,8 @@
       <h5 *ngIf="selectedSet">
         <span class="ss ss-{{selectedSet.code}} ss-fw"></span>
         {{selectedSet.name}}
-        <span *ngIf="selectedSet.released_at" class="font-12">({{selectedSet.released_at | date:'MMMM y'}} / {{selectedSet.card_count}})</span>
-        <i *ngIf="selectedSet.released_at" class="font-12 fas fa-trash pointer ml-1" (click)="deleteSetAndCards(selectedSet.code)"></i>
+        <span class="font-12">({{selectedSet.released_at | date:'MMMM y'}} / {{selectedSet.card_count}})</span>
+        <i class="font-12 fas fa-trash pointer ml-1" (click)="deleteSetAndCards(selectedSet.code)"></i>
       </h5>
       <table class="table table-sm table-hover" *ngIf="selectedCards">
 

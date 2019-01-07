@@ -122,10 +122,10 @@ export class MtgDashboardComponent implements OnInit {
     this.selectedCards = null;
   }
 
-  getCardsFilter(set: Set, rarity: string, onlyMissing: boolean) {
-    this.selectedSet = set;
+  getCardsFilter(setCode: string, rarity: string, onlyMissing: boolean) {
+    this.selectedSet = null;
     this.selectedCards = null;
-    this.mtgService.getCardsFilter(set.code, rarity, onlyMissing).subscribe(
+    this.mtgService.getCardsFilter(setCode, rarity, onlyMissing).subscribe(
       cards => {
         MtgDashboardComponent.populateManaCostDisplay(cards);
         this.selectedCards = cards;
