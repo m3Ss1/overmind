@@ -16,10 +16,10 @@ export class MtgDashboardComponent implements OnInit {
 
   mtgSets: Set[] = [];
   selectedSet: Set;
-  selectedSetCode: String;
+  selectedSetCode: string;
   selectedCards: Card[];
-  selectedRarity: String = 'all';
-  showOnlyMissing: Boolean = false;
+  selectedRarity: string;
+  showOnlyMissing: boolean;
 
   totalSetCost: number;
   totalBuyPrice: number;
@@ -79,6 +79,8 @@ export class MtgDashboardComponent implements OnInit {
   }
 
   private refresh() {
+    this.selectedRarity = 'all';
+    this.showOnlyMissing = false;
     this.mtgService.getAllSets().subscribe(sets => {
         this.mtgSets = sets;
     });
