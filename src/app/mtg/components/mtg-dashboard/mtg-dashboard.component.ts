@@ -16,6 +16,7 @@ export class MtgDashboardComponent implements OnInit {
 
   mtgSets: Set[] = [];
   selectedSet: Set;
+  selectedSetCode: String;
   selectedCards: Card[];
   selectedRarity: String = 'all';
   showOnlyMissing: Boolean = false;
@@ -123,8 +124,6 @@ export class MtgDashboardComponent implements OnInit {
   }
 
   getCardsFilter(setCode: string, rarity: string, onlyMissing: boolean) {
-    this.selectedSet = null;
-    this.selectedCards = null;
     this.mtgService.getCardsFilter(setCode, rarity, onlyMissing).subscribe(
       cards => {
         MtgDashboardComponent.populateManaCostDisplay(cards);
