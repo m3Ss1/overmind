@@ -6,12 +6,12 @@
     <div class="col-md-3">
       <h3>Series</h3>
       <ul class="list-group">
-        <li class="list-group-item my-list-group-item" *ngFor="let serie of series"
+        <li class="list-group-item list-group-item-action my-list-group-item pointer" *ngFor="let serie of series"
             (click)="getComicsBySerie(serie)">
-          {{serie._id}} <span class="badge">{{ serie.read }}/{{ serie.total }}</span>
-          <div class="progress" style="height: 1px;">
-            <div class="progress-bar" role="progressbar" [ngStyle]="{'width': serie.read/serie.total*100 + '%'}"></div>
+          <div id="test2" class="progress_read" [ngStyle]="{'width': serie.read/serie.total*100 + '%'}">
+            <div class="my-text">{{serie._id}} <b class="font-11">{{ serie.read }}/{{ serie.total }}</b></div>
           </div>
+          <div id="test1" class="progress_archived" [ngStyle]="{'width': serie.archived/serie.total*100 + '%'}"></div>
         </li>
       </ul>
     </div>
@@ -23,6 +23,7 @@
         <thead>
         <tr>
           <th scope="col">#</th>
+          <th scope="col">Serie</th>
           <th scope="col">Release Date</th>
           <th scope="col">Title</th>
           <th scope="col">Pages</th>
@@ -31,26 +32,38 @@
         </tr>
         </thead>
         <tbody class="my-list-group-item">
-        <tr *ngFor="let comic of comics">
-          <th scope="row"
-              [ngClass]="{'text-success': comic.read,
-                          'text-dark':    comic.in_collection && !comic.read,
-                          'text-danger': !comic.in_collection}">
-            {{comic.serie_number}}
-          </th>
-          <td>{{comic.release_date | date:'dd-MM-y'}}</td>
-          <td>{{comic.title}}</td>
-          <td>{{comic.pages | number}}</td>
-          <td>{{comic.read_date | date:'dd-MM-y'}}</td>
+        <tr *ngFor="let comic of comics" [ngClass]="{'text-success': comic.read,
+                                                     'text-dark': comic.in_collection && !comic.read,
+                                                     'text-danger': !comic.in_collection}">
+          <th scope="row">{{comic.serie_number}}</th>
           <td>
-            <i class="fas fa-bookmark pointer" style="padding-right: 5px;"
-                [ngClass]="{'text-success': comic.in_collection, 'text-dark': !comic.in_collection}"
-                (click)="toggleOwned(comic)"></i>
-            <i class="fas fa-book pointer" style="padding-right: 5px;"
-                [ngClass]="{'text-success': comic.read, 'text-dark': !comic.read}"
-                (click)="toggleRead(comic)"></i>
-            <i class="fas fa-clone text-warning pointer" style="padding-right: 10px;"
-                (click)="duplicate(comic)"></i>
+            <input type="text" class="form-control form-control-sm my-form-style w-200" aria-label=""
+                   (change)="updateComic(comic)" placeholder="" [(ngModel)]="comic.serie_title">
+          </td>
+          <td>
+            <input type="text" class="form-control form-control-sm my-form-style w-date" aria-label=""
+                   (change)="updateComic(comic)" placeholder="" [(ngModel)]="comic.release_date">
+          </td>
+          <td>
+            <input type="text" class="form-control form-control-sm my-form-style w-200" aria-label=""
+                   (change)="updateComic(comic)" placeholder="" [(ngModel)]="comic.title">
+          </td>
+          <td>
+            <input type="text" class="form-control form-control-sm my-form-style w-25" aria-label=""
+                   (change)="updateComic(comic)" placeholder="" [(ngModel)]="comic.pages">
+          </td>
+          <td>
+            <input type="text" class="form-control form-control-sm my-form-style w-date" aria-label=""
+                   (change)="updateComic(comic)" placeholder="" [(ngModel)]="comic.read_date">
+          </td>
+          <td>
+            <i class="fas fa-bookmark pointer pr-1" (click)="comic.in_collection = !comic.in_collection; updateComic(comic)"
+               [ngClass]="{'text-primary': comic.in_collection, 'text-black-50': !comic.in_collection}"></i>
+            <i class="fas fa-archive pointer pr-1" (click)="toggleArchive(comic)"
+               [ngClass]="{'text-primary': comic.archived, 'text-black-50': !comic.archived}"></i>
+            <i class="fas fa-book pointer pr-1" (click)="toggleRead(comic)"
+               [ngClass]="{'text-success': comic.read, 'text-black-50': !comic.read}"></i>
+            <i class="fas fa-copy text-warning pointer pr-1" (click)="duplicate(comic)"></i>
             <i class="fas fa-trash text-danger pointer" (click)="remove(comic)"></i>
           </td>
         </tr>

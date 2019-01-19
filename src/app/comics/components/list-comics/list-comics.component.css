@@ -1,12 +1,47 @@
 .my-list-group-item {
   font-size: 12px;
-  padding: 5px;
+  padding: 0;
 }
-
+.my-text {
+  margin-left: 5px;
+  margin-top: -2px;
+}
 .my-list-group-item span.badge {
   font-size: 10px;
 }
 
+.my-form-style {
+  height: 16px;
+  font-size: 11px;
+}
+
+.w-date {
+  width: 74px;
+}
+
+.w-200 {
+  width: 200px;
+}
+
 .pointer {
   cursor: pointer;
+}
+
+.font-11 {
+  font-size: 11px;
+}
+
+.progress_read {
+  background: #d7ffd7;
+  white-space: nowrap;
+  overflow: unset;
+  height: 90%;
+  margin-top: 2px;
+}
+
+.progress_archived {
+  background: #a1cdff;
+  white-space: nowrap;
+  overflow: unset;
+  height: 10%;
 }

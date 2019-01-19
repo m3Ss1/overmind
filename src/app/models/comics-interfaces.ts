@@ -11,12 +11,14 @@ declare module 'comics-interfaces' {
     in_collection: boolean;
     read: boolean;
     read_date: Date;
+    archived: boolean;
   }
 
   export interface Serie {
     _id: string;
     total: number;
     read: number;
+    archived: number;
   }
 
 }

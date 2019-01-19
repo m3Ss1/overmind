@@ -37,7 +37,11 @@ let Comic = new Schema({
     },
     read_date: {
         type: Date
-    }
+    },
+    archived: {
+      type: Boolean,
+      default: false
+    },
 });
 
 module.exports = mongoose.model('Comic', Comic);

@@ -48,9 +48,20 @@ export class ListComicsComponent implements OnInit {
         });
   }
 
-  toggleOwned(comic: Comic) {
-    comic.in_collection = !comic.in_collection;
+  updateComic(comic: Comic) {
     this.comicsService.updateComic(comic).subscribe();
+  }
+
+  toggleArchive(comic: Comic) {
+    comic.archived = !comic.archived;
+    this.comicsService.updateComic(comic)
+      .subscribe(() => {
+        if (comic.archived) {
+          this.selectedSerie.archived++;
+        } else {
+          this.selectedSerie.archived--;
+        }
+      });
   }
 
   toggleRead(comic: Comic) {
@@ -95,6 +106,9 @@ export class ListComicsComponent implements OnInit {
         this.comics = this.comics.filter(item => item !== comic);
         if (comic.read) {
           this.selectedSerie.read--;
+        }
+        if (comic.archived) {
+          this.selectedSerie.archived--;
         }
         this.selectedSerie.total--;
       });

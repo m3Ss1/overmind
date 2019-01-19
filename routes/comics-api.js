@@ -37,7 +37,8 @@ router.get('/seriesCount', function (req, res) {
       {"$group": {
           "_id": "$serie_title",
           "total": {"$sum": 1},
-          "read": {"$sum": {"$cond": [{"$eq": ["$read", true]}, 1, 0]}}
+          "read": {"$sum": {"$cond": [{"$eq": ["$read", true]}, 1, 0]}},
+          "archived": {"$sum": {"$cond": [{"$eq": ["$archived", true]}, 1, 0]}}
       }},
       // Sorting
       {"$sort": {"_id": 1}}
