@@ -21,6 +21,10 @@ export class MtgDashboardComponent implements OnInit {
   selectedRarity: string;
   showOnlyMissing: boolean;
 
+  ownedCount: number;
+  buyPrice: number;
+
+  totalShown: number;
   totalSetCost: number;
   totalBuyPrice: number;
   totalGainLoss: number;
@@ -82,11 +86,12 @@ export class MtgDashboardComponent implements OnInit {
     this.selectedRarity = 'all';
     this.showOnlyMissing = false;
     this.mtgService.getAllSets().subscribe(sets => {
-        this.mtgSets = sets;
+      this.mtgSets = sets;
     });
   }
 
   recalculateTotals() {
+    this.totalShown = 0;
     this.totalSetCost = 0;
     this.totalBuyPrice = 0;
     this.totalGainLoss = 0;
@@ -95,13 +100,14 @@ export class MtgDashboardComponent implements OnInit {
 
     if (this.selectedCards) {
       for (const card of this.selectedCards) {
+        this.totalShown += 1;
 
         if (card.eur != null) {
           this.totalSetCost += Number(card.eur);
         }
 
         if (card.purchase_price != null) {
-          this.totalBuyPrice += Number(card.purchase_price);
+          this.totalBuyPrice += Number(card.purchase_price) * card.collection_count;
         }
 
         MtgDashboardComponent.updateGainLossValue(card);
@@ -123,6 +129,26 @@ export class MtgDashboardComponent implements OnInit {
   reset() {
     this.selectedSet = null;
     this.selectedCards = null;
+  }
+
+  setOwnedCount() {
+    if (this.ownedCount && this.selectedCards) {
+      for (const card of this.selectedCards) {
+        card.collection_count = this.ownedCount;
+        this.updateCard(card);
+      }
+    }
+    this.ownedCount = null;
+  }
+
+  setBuyPrice() {
+    if (this.buyPrice && this.selectedCards) {
+      for (const card of this.selectedCards) {
+        card.purchase_price = this.buyPrice;
+        this.updateCard(card);
+      }
+    }
+    this.buyPrice = null;
   }
 
   getCardsFilter(setCode: string, rarity: string, onlyMissing: boolean) {
@@ -218,9 +244,12 @@ export class MtgDashboardComponent implements OnInit {
 
 @Component({
   selector: 'app-mtg-img-modal-content',
-  template: `<img [ngStyle]="{'width': imageUris.length > 1 ? '249px' : '300px'}" alt="" *ngFor="let imageUri of imageUris" src="{{imageUri}}"/>`
+  template: `<img [ngStyle]="{'width': imageUris.length > 1 ? '249px' : '300px'}" alt="" *ngFor="let imageUri of imageUris"
+                  src="{{imageUri}}"/>`
 })
 export class MtgImgModalContentComponent {
   @Input() imageUris;
-  constructor() {}
+
+  constructor() {
+  }
 }

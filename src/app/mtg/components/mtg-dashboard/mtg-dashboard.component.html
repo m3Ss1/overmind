@@ -41,7 +41,19 @@
           </div>
         </li>
       </ul>
-      <ul class="list-group">
+      <div *ngIf="selectedCards" class="input-group input-group-sm mb-1 mt-1">
+        <input type="text" class="form-control" aria-label=""
+               placeholder="Set Owned To..." [(ngModel)]="ownedCount">
+        <div class="input-group-append pointer" (click)="setOwnedCount()"><div class="input-group-text">OK</div></div>
+        <div class="input-group-append pointer" (click)="ownedCount = null"><div class="input-group-text">Reset</div></div>
+      </div>
+      <div *ngIf="selectedCards" class="input-group input-group-sm mt-1">
+        <input type="text" class="form-control" aria-label=""
+               placeholder="Set Buy To..." [(ngModel)]="buyPrice">
+        <div class="input-group-append pointer" (click)="setBuyPrice()"><div class="input-group-text">OK</div></div>
+        <div class="input-group-append pointer" (click)="buyPrice = null"><div class="input-group-text">Reset</div></div>
+      </div>
+      <ul class="list-group mt-1">
         <li class="list-group-item p-0">
           <div class="form-check form-check-inline font-14 ml-2">
             <i class="fas fa-bars font-16 mr-2"></i>
@@ -101,7 +113,8 @@
 
         <!-- Total Gain/Loss Footer -->
         <tr>
-          <td colspan="5"></td>
+          <td>{{totalShown}}</td>
+          <td colspan="4"></td>
           <td>{{totalSetCost * EUR_TO_CHF_FX | number:'1.0-2'}}</td>
           <td>{{totalBuyPrice | number:'1.0-2'}}</td>
           <td [ngClass]="{'red': totalGainLoss < 0, 'green': totalGainLoss > 0}">{{totalGainLoss | number:'1.0-2'}}</td>
