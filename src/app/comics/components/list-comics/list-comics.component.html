@@ -4,8 +4,9 @@
 
     <!-- Left Column displaying all Series -->
     <div class="col-md-3">
-      <h3>Series</h3>
+      <h3>Comics Filter</h3>
       <ul class="list-group">
+        <li class="list-group-item list-group-item-action my-list-group-item pointer" (click)="getMissingComics()">Missing</li>
         <li class="list-group-item list-group-item-action my-list-group-item pointer" *ngFor="let serie of series"
             (click)="getComicsBySerie(serie)">
           <div id="test2" class="progress_read" [ngStyle]="{'width': serie.read/serie.total*100 + '%'}">
@@ -17,8 +18,8 @@
     </div>
 
     <!-- Main Table for Comics -->
-    <div class="col-md-9" *ngIf="selectedSerie">
-      <h3>{{selectedSerie._id}}</h3>
+    <div class="col-md-9" *ngIf="comics">
+      <h3 >{{selectedSerie ? selectedSerie._id : 'Missing Comics'}}</h3>
       <table class="table table-sm table-hover">
         <thead>
         <tr>

@@ -19,6 +19,16 @@ router.get('/', function (req, res) {
   }).sort([['publisher', -1], ['serie_title', 1], ['serie_number', 1]]);
 });
 
+/* GET all missing comics */
+router.get('/missing', function (req, res) {
+  Comic.find({
+      'in_collection': false
+    }, function (err, comics) {
+    if (err) res.send(err);
+    res.send(comics);
+  }).sort([['publisher', -1], ['serie_title', 1], ['serie_number', 1]]);
+});
+
 /* GET comics by Serie ID */
 router.get('/bySerie/:serieId', function (req, res) {
   Comic.find({

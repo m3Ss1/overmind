@@ -37,6 +37,12 @@ export class ComicsService {
       .pipe(catchError(ComicsService.handleError));
   }
 
+  getMissingComics(): Observable<Comic[]> {
+    return this.http
+      .get<Comic[]>(API_URL + '/api/comics/missing')
+      .pipe(catchError(ComicsService.handleError));
+  }
+
   updateComic(comic): Observable<Comic> {
     return this.http
       .put<Comic>(API_URL + '/api/comics/update', comic)

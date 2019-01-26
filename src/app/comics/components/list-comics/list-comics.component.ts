@@ -12,7 +12,7 @@ export class ListComicsComponent implements OnInit {
 
   series: Serie[] = [];
   selectedSerie: Serie;
-  comics: Comic[] = [];
+  comics: Comic[] = null;
 
   constructor(private comicsService: ComicsService) {
   }
@@ -46,6 +46,13 @@ export class ListComicsComponent implements OnInit {
           this.selectedSerie = serie;
           this.comics = comics;
         });
+  }
+
+  getMissingComics() {
+    this.selectedSerie = null;
+    this.comicsService.getMissingComics().subscribe(missingComics => {
+      this.comics = missingComics;
+    });
   }
 
   updateComic(comic: Comic) {
