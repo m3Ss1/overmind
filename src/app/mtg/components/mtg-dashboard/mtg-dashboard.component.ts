@@ -20,6 +20,7 @@ export class MtgDashboardComponent implements OnInit {
   selectedCards: Card[];
   selectedRarity: string;
   showOnlyMissing: boolean;
+  displayExport: boolean;
 
   ownedCount: number;
   buyPrice: number;
@@ -240,6 +241,17 @@ export class MtgDashboardComponent implements OnInit {
     modalRef.componentInstance.imageUris = uris;
   }
 
+  getStringExport() {
+    if (!this.selectedCards) {
+      return;
+    }
+
+    let exportList = '';
+    for (const card of this.selectedCards) {
+      exportList += '1 ' + card.name + ' (' + card.set.toUpperCase() + ')\n';
+    }
+    return exportList;
+  }
 }
 
 @Component({

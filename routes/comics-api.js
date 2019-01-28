@@ -16,7 +16,7 @@ router.get('/', function (req, res) {
   Comic.find(function (err, comics) {
     if (err) res.send(err);
     res.send(comics);
-  }).sort([['publisher', -1], ['serie_title', 1], ['serie_number', 1]]);
+  }).sort([['publisher', -1], ['serie_title', 1], ['serie_number', 1], ['title', 1]]);
 });
 
 /* GET all missing comics */
@@ -36,7 +36,7 @@ router.get('/bySerie/:serieId', function (req, res) {
   }, function (err, comics) {
     if (err) res.send(err);
     res.send(comics);
-  }).sort([['publisher', -1], ['serie_number', 1]]);
+  }).sort([['publisher', -1], ['serie_number', 1], ['title', 1]]);
 });
 
 /* GET distinct series, total and read count */

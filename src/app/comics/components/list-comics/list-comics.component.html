@@ -6,6 +6,7 @@
     <div class="col-md-3">
       <h3>Comics Filter</h3>
       <ul class="list-group">
+        <li class="list-group-item list-group-item-action my-list-group-item pointer" (click)="refresh()">Refresh</li>
         <li class="list-group-item list-group-item-action my-list-group-item pointer" (click)="getMissingComics()">Missing</li>
         <li class="list-group-item list-group-item-action my-list-group-item pointer" *ngFor="let serie of series"
             (click)="getComicsBySerie(serie)">
@@ -36,7 +37,10 @@
         <tr *ngFor="let comic of comics" [ngClass]="{'text-success': comic.read,
                                                      'text-dark': comic.in_collection && !comic.read,
                                                      'text-danger': !comic.in_collection}">
-          <th scope="row">{{comic.serie_number}}</th>
+          <td>
+            <input type="text" class="form-control form-control-sm my-form-style" aria-label=""
+                   (change)="updateComic(comic)" placeholder="" [(ngModel)]="comic.serie_number">
+          </td>
           <td>
             <input type="text" class="form-control form-control-sm my-form-style w-200" aria-label=""
                    (change)="updateComic(comic)" placeholder="" [(ngModel)]="comic.serie_title">

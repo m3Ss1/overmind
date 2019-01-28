@@ -38,7 +38,14 @@ export class ListComicsComponent implements OnInit {
       .subscribe(series => this.series = series);
   }
 
+  refresh() {
+    this.comics = null;
+    this.selectedSerie = null;
+    this.ngOnInit();
+  }
+
   getComicsBySerie(serie: Serie) {
+    this.comics = null;
     this.comicsService
       .getComicsBySerie(serie._id)
       .subscribe(

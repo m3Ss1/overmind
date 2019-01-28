@@ -12,6 +12,10 @@
                    value="" (change)="getCardsFilter(selectedSetCode, selectedRarity, showOnlyMissing)">
             <label class="form-check-label" for="onlyMissing">Show only missing</label>
           </div>
+          <div class="form-check font-14 ml-2">
+            <input class="form-check-input" [(ngModel)]="displayExport" type="checkbox" id="exportTextCheckbox" value="">
+            <label class="form-check-label" for="exportTextCheckbox">Export View</label>
+          </div>
         </li>
         <li class="list-group-item p-0 border-0">
           <div class="form-check form-check-inline font-14 ml-2 mr-1">
@@ -42,16 +46,16 @@
         </li>
       </ul>
       <div *ngIf="selectedCards" class="input-group input-group-sm mb-1 mt-1">
-        <input type="text" class="form-control" aria-label=""
+        <input type="text" class="form-control hei-20 font-11" aria-label=""
                placeholder="Set Owned To..." [(ngModel)]="ownedCount">
-        <div class="input-group-append pointer" (click)="setOwnedCount()"><div class="input-group-text">OK</div></div>
-        <div class="input-group-append pointer" (click)="ownedCount = null"><div class="input-group-text">Reset</div></div>
+        <div class="input-group-append pointer hei-20" (click)="setOwnedCount()"><div class="input-group-text">OK</div></div>
+        <div class="input-group-append pointer hei-20" (click)="ownedCount = null"><div class="input-group-text">Reset</div></div>
       </div>
       <div *ngIf="selectedCards" class="input-group input-group-sm mt-1">
-        <input type="text" class="form-control" aria-label=""
+        <input type="text" class="form-control hei-20 font-11" aria-label=""
                placeholder="Set Buy To..." [(ngModel)]="buyPrice">
-        <div class="input-group-append pointer" (click)="setBuyPrice()"><div class="input-group-text">OK</div></div>
-        <div class="input-group-append pointer" (click)="buyPrice = null"><div class="input-group-text">Reset</div></div>
+        <div class="input-group-append pointer hei-20" (click)="setBuyPrice()"><div class="input-group-text">OK</div></div>
+        <div class="input-group-append pointer hei-20" (click)="buyPrice = null"><div class="input-group-text">Reset</div></div>
       </div>
       <ul class="list-group mt-1">
         <li class="list-group-item p-0">
@@ -59,7 +63,7 @@
             <i class="fas fa-bars font-16 mr-2"></i>
             <input class="form-check-input" [(ngModel)]="selectedSetCode" type="radio" name="inlineRadioOptionsSet" id="setAll"
                    value="all" (change)="getCardsFilter(selectedSetCode, selectedRarity, showOnlyMissing); selectedSet=null">
-            <label class="form-check-label" for="setAll">All</label>
+            <label class="form-check-label" for="setAll">ALL</label>
           </div>
         </li>
         <li class="list-group-item p-0">
@@ -67,7 +71,7 @@
             <i class="fas fa-puzzle-piece font-16 mr-1"></i>
             <input class="form-check-input" [(ngModel)]="selectedSetCode" type="radio" name="inlineRadioOptionsSet" id="setTokens"
                    value="tokens" (change)="getCardsFilter(selectedSetCode, selectedRarity, showOnlyMissing); selectedSet=null">
-            <label class="form-check-label" for="setTokens">Tokens</label>
+            <label class="form-check-label" for="setTokens">TOK</label>
           </div>
         </li>
       </ul>
@@ -77,14 +81,14 @@
             <span class="ss ss-{{mtgSet.code}} ss-fw mr-1"></span>
             <input class="form-check-input" [(ngModel)]="selectedSetCode" type="radio" name="inlineRadioOptionsSet" id="{{mtgSet.code}}"
                    value="{{mtgSet.code}}" (change)="getCardsFilter(selectedSetCode, selectedRarity, showOnlyMissing); selectedSet=mtgSet">
-            <label class="form-check-label" for="{{mtgSet.code}}"><span class="font-14">{{mtgSet.name}}</span></label>
+            <label class="form-check-label" for="{{mtgSet.code}}"><span class="font-14">{{mtgSet.code.toUpperCase()}}</span></label>
           </div>
         </li>
       </ul>
     </div>
 
     <!-- Table -->
-    <div class="col-md-10">
+    <div class="col-md-10" *ngIf="!displayExport">
       <h5 *ngIf="selectedSet">
         <span class="ss ss-{{selectedSet.code}} ss-fw"></span>
         {{selectedSet.name}}
@@ -185,6 +189,13 @@
 
         </tbody>
       </table>
+    </div>
+
+    <div class="col-md-10" *ngIf="displayExport">
+      <div class="form-group">
+        <label for="exportTextArea">Quick Export List</label>
+        <textarea class="form-control" id="exportTextArea" rows="25">{{getStringExport()}}</textarea>
+      </div>
     </div>
 
   </div>
