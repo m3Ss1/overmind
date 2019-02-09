@@ -33,9 +33,10 @@
         </tr>
         </thead>
         <tbody class="my-list-group-item">
-        <tr *ngFor="let comic of comics" [ngClass]="{'text-success': comic.read,
-                                                     'text-dark': comic.in_collection && !comic.read,
-                                                     'text-danger': !comic.in_collection}">
+        <tr *ngFor="let comic of comics | slice: (page-1) * pageSize : (page-1) * pageSize + pageSize"
+            [ngClass]="{'text-success': comic.read,
+                        'text-dark': comic.in_collection && !comic.read,
+                        'text-danger': !comic.in_collection}">
           <td>
             <input type="text" class="form-control form-control-sm my-form-style" aria-label=""
                    (change)="updateComic(comic)" placeholder="" [(ngModel)]="comic.serie_number">
@@ -73,6 +74,21 @@
         </tr>
         </tbody>
       </table>
+
+      <div ngbDropdown placement="top-left" class="float-left">
+        <button class="btn btn-sm mr-1" id="changePageSize" ngbDropdownToggle>Size</button>
+        <div ngbDropdownMenu aria-labelledby="changePageSize">
+          <button class="dropdown-item" (click)="pageSize=10">10</button>
+          <button class="dropdown-item" (click)="pageSize=25">25</button>
+          <button class="dropdown-item" (click)="pageSize=-1">All</button>
+        </div>
+      </div>
+
+      <ngb-pagination
+        [(page)]="page"
+        [pageSize]="pageSize"
+        [collectionSize]="comics.length"
+        [maxSize]="5" [rotate]="true" [boundaryLinks]="true" size="sm"></ngb-pagination>
     </div>
 
   </div>

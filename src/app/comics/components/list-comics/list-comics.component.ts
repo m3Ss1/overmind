@@ -13,6 +13,8 @@ export class ListComicsComponent implements OnInit {
   series: Serie[] = [];
   selectedSerie: Serie;
   comics: Comic[] = null;
+  page: number;
+  pageSize: number;
 
   constructor(private comicsService: ComicsService) {
   }
@@ -33,6 +35,8 @@ export class ListComicsComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.page = 1;
+    this.pageSize = 25;
     this.comicsService
       .getAllComicSeries()
       .subscribe(series => this.series = series);
