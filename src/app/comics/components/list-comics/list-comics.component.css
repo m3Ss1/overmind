@@ -33,6 +33,22 @@
   font-size: 11px;
 }
 
+.sidenav {
+  height: 90%;
+  top: 55px;
+  padding-left: 10px;
+  padding-top: 10px;
+  padding-right: 10px;
+  position: fixed;
+  z-index: 1;
+  overflow-x: hidden;
+  width: 300px;
+}
+
+.main {
+  margin-left: 320px;
+}
+
 .progress_read {
   background: #d7ffd7;
   white-space: nowrap;

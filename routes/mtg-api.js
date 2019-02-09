@@ -35,14 +35,19 @@ router.get('/set/all', function (req, res) {
   }).sort([['released_at', -1]]);
 });
 
-/* GET tokens */
-router.get('/card/tokens', function (req, res) {
-  MtgCard.find({
-    $where: 'this.set.length == 4'
-  }, function (err, comics) {
-    if (err) res.send(err);
-    res.send(comics);
-  }).sort({'released_at': -1, 'set': 1, 'display_number': 1});
+/* GET only not in SET cards */
+router.get('/card/notInSet', function (req, res) {
+  MtgSet.find(function (err, sets) {
+    var codes = [];
+    for (const set of sets) {
+      codes.push(set.code);
+    }
+    console.log(codes);
+    MtgCard.find({set: {$nin: codes}}, function (err, comics) {
+      if (err) res.send(err);
+      res.send(comics);
+    });
+  });
 });
 
 /* GET cards by set code */

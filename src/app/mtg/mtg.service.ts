@@ -47,12 +47,12 @@ export class MtgService {
     return this.http.get<Card[]>(API_URL + '/api/mtg/card/filter/' + setCode + '/' + rarity + '/' + onlyMissing);
   }
 
-  getTokens() {
-    return this.http.get<Card[]>(API_URL + '/api/mtg/card/tokens');
-  }
-
   updateCard(card: Card): Observable<Card> {
     return this.http.put<Card>(API_URL + '/api/mtg/card/update', card);
+  }
+
+  getNotInSetCards(): Observable<Card[]> {
+    return this.http.get<Card[]>(API_URL + '/api/mtg/card/notInSet');
   }
 
 }

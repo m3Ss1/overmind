@@ -27,10 +27,13 @@ export class MtgDashboardComponent implements OnInit {
 
   totalShown: number;
   totalSetCost: number;
+  totalOwnedSetCost: number;
   totalBuyPrice: number;
   totalGainLoss: number;
   totalOwnedCards: number;
   totalInDeckCards: number;
+  page: number;
+  pageSize: number;
 
   private static populateManaCostDisplay(cards: Card[]) {
     for (const card of cards) {
@@ -58,7 +61,7 @@ export class MtgDashboardComponent implements OnInit {
   private static updateGainLossValue(card: Card) {
     /* Update gain/loss price */
     if (card.eur && card.purchase_price && card.collection_count > 0) {
-      card.gain_loss = ((Number(card.eur) * Constants.EUR_TO_CHF_FX) - card.purchase_price) * card.collection_count;
+      card.gain_loss = ((Number(card.eur) * Constants.EUR_TO_CHF_FX) - card.purchase_price) * (card.collection_count > 0 ? 1 : 0);
     } else {
       card.gain_loss = 0;
     }
@@ -84,6 +87,8 @@ export class MtgDashboardComponent implements OnInit {
   }
 
   private refresh() {
+    this.page = 1;
+    this.pageSize = 10;
     this.selectedRarity = 'all';
     this.showOnlyMissing = false;
     this.mtgService.getAllSets().subscribe(sets => {
@@ -94,6 +99,7 @@ export class MtgDashboardComponent implements OnInit {
   recalculateTotals() {
     this.totalShown = 0;
     this.totalSetCost = 0;
+    this.totalOwnedSetCost = 0;
     this.totalBuyPrice = 0;
     this.totalGainLoss = 0;
     this.totalOwnedCards = 0;
@@ -105,10 +111,11 @@ export class MtgDashboardComponent implements OnInit {
 
         if (card.eur != null) {
           this.totalSetCost += Number(card.eur);
+          this.totalOwnedSetCost += Number(card.eur) * (card.collection_count > 0 ? 1 : 0);
         }
 
         if (card.purchase_price != null) {
-          this.totalBuyPrice += Number(card.purchase_price) * card.collection_count;
+          this.totalBuyPrice += Number(card.purchase_price) * (card.collection_count > 0 ? 1 : 0);
         }
 
         MtgDashboardComponent.updateGainLossValue(card);
@@ -125,11 +132,6 @@ export class MtgDashboardComponent implements OnInit {
         }
       }
     }
-  }
-
-  reset() {
-    this.selectedSet = null;
-    this.selectedCards = null;
   }
 
   setOwnedCount() {
@@ -153,6 +155,8 @@ export class MtgDashboardComponent implements OnInit {
   }
 
   getCardsFilter(setCode: string, rarity: string, onlyMissing: boolean) {
+    this.selectedCards = null;
+    this.totalSetCost = null;
     this.mtgService.getCardsFilter(setCode, rarity, onlyMissing).subscribe(
       cards => {
         MtgDashboardComponent.populateManaCostDisplay(cards);
@@ -162,15 +166,13 @@ export class MtgDashboardComponent implements OnInit {
     );
   }
 
-  getTokens() {
-    this.selectedSet = null;
+  getNotInSetCards() {
     this.selectedCards = null;
-    this.mtgService.getTokens().subscribe(
-      cards => {
-        this.selectedCards = cards;
-        this.recalculateTotals();
-      }
-    );
+    this.selectedSet = null;
+    this.mtgService.getNotInSetCards().subscribe(cards => {
+      this.selectedCards = cards;
+      this.recalculateTotals();
+    });
   }
 
   deleteSetAndCards(setCode: string) {
@@ -248,7 +250,7 @@ export class MtgDashboardComponent implements OnInit {
 
     let exportList = '';
     for (const card of this.selectedCards) {
-      exportList += '1 ' + card.name + ' (' + card.set.toUpperCase() + ')\n';
+      exportList += '1 ' + card.name + ' (' + card.set_name + ')\n';
     }
     return exportList;
   }

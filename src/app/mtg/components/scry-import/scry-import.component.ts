@@ -79,4 +79,11 @@ export class ScryImportComponent implements OnInit {
     );
   }
 
+  addCard(card: Card) {
+    const cards: Card[] = [];
+    cards.push(card);
+    this.mtgService.persistCards(cards).subscribe(res => {
+      this.importStatus += 'Card added:' + res.status + '\n';
+    });
+  }
 }

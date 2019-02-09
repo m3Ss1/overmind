@@ -45,13 +45,13 @@
           </div>
         </li>
       </ul>
-      <div *ngIf="selectedCards" class="input-group input-group-sm mb-1 mt-1">
+      <div class="input-group input-group-sm mb-1 mt-1">
         <input type="text" class="form-control hei-20 font-11" aria-label=""
                placeholder="Set Owned To..." [(ngModel)]="ownedCount">
         <div class="input-group-append pointer hei-20" (click)="setOwnedCount()"><div class="input-group-text">OK</div></div>
         <div class="input-group-append pointer hei-20" (click)="ownedCount = null"><div class="input-group-text">Reset</div></div>
       </div>
-      <div *ngIf="selectedCards" class="input-group input-group-sm mt-1">
+      <div class="input-group input-group-sm mt-1">
         <input type="text" class="form-control hei-20 font-11" aria-label=""
                placeholder="Set Buy To..." [(ngModel)]="buyPrice">
         <div class="input-group-append pointer hei-20" (click)="setBuyPrice()"><div class="input-group-text">OK</div></div>
@@ -85,17 +85,28 @@
           </div>
         </li>
       </ul>
+      <ul class="list-group">
+        <li class="list-group-item p-0">
+          <div class="form-check form-check-inline font-14 ml-2">
+            <i class="fas fa-bars font-16 mr-2"></i>
+            <input class="form-check-input" [(ngModel)]="selectedSetCode" type="radio" name="inlineRadioOptionsSet" id="notInSet"
+                   value="notInSet" (change)="getNotInSetCards()">
+            <label class="form-check-label" for="notInSet">Singles</label>
+          </div>
+        </li>
+      </ul>
     </div>
 
     <!-- Table -->
-    <div class="col-md-10" *ngIf="!displayExport">
+    <div class="col-md-10" *ngIf="!displayExport && selectedCards">
       <h5 *ngIf="selectedSet">
         <span class="ss ss-{{selectedSet.code}} ss-fw"></span>
         {{selectedSet.name}}
         <span class="font-12">({{selectedSet.released_at | date:'MMMM y'}} / {{selectedSet.card_count}})</span>
+        {{totalSetCost * EUR_TO_CHF_FX | number:'1.0-2'}}CHF
         <i class="font-12 fas fa-trash pointer ml-1" (click)="deleteSetAndCards(selectedSet.code)"></i>
       </h5>
-      <table class="table table-sm table-hover" *ngIf="selectedCards">
+      <table class="table table-sm table-hover">
 
         <thead class="font-14">
         <tr>
@@ -119,7 +130,7 @@
         <tr>
           <td>{{totalShown}}</td>
           <td colspan="4"></td>
-          <td>{{totalSetCost * EUR_TO_CHF_FX | number:'1.0-2'}}</td>
+          <td>{{totalOwnedSetCost * EUR_TO_CHF_FX | number:'1.0-2'}}</td>
           <td>{{totalBuyPrice | number:'1.0-2'}}</td>
           <td [ngClass]="{'red': totalGainLoss < 0, 'green': totalGainLoss > 0}">{{totalGainLoss | number:'1.0-2'}}</td>
           <td>{{totalOwnedCards}}</td>
@@ -127,7 +138,7 @@
         </tr>
 
         <!-- MAIN ROWS -->
-        <tr *ngFor="let card of selectedCards">
+        <tr *ngFor="let card of selectedCards | slice: (page-1) * pageSize : (page-1) * pageSize + pageSize">
 
           <!-- Number -->
           <td>{{card.collector_number}}</td>
@@ -189,6 +200,21 @@
 
         </tbody>
       </table>
+
+      <div ngbDropdown placement="top-left" class="float-left">
+        <button class="btn btn-sm mr-1" id="changePageSize" ngbDropdownToggle>Size</button>
+        <div ngbDropdownMenu aria-labelledby="changePageSize">
+          <button class="dropdown-item" (click)="pageSize=10">10</button>
+          <button class="dropdown-item" (click)="pageSize=25">25</button>
+          <button class="dropdown-item" (click)="pageSize=-1">All</button>
+        </div>
+      </div>
+
+      <ngb-pagination
+        [(page)]="page"
+        [pageSize]="pageSize"
+        [collectionSize]="selectedCards.length"
+        [maxSize]="5" [rotate]="true" [boundaryLinks]="true" size="sm"></ngb-pagination>
     </div>
 
     <div class="col-md-10" *ngIf="displayExport">

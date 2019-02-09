@@ -3,8 +3,7 @@
   <div class="row">
 
     <!-- Left Column displaying all Series -->
-    <div class="col-md-3">
-      <h3>Comics Filter</h3>
+    <div class="sidenav">
       <ul class="list-group">
         <li class="list-group-item list-group-item-action my-list-group-item pointer" (click)="refresh()">Refresh</li>
         <li class="list-group-item list-group-item-action my-list-group-item pointer" (click)="getMissingComics()">Missing</li>
@@ -19,7 +18,7 @@
     </div>
 
     <!-- Main Table for Comics -->
-    <div class="col-md-9" *ngIf="comics">
+    <div class="main" *ngIf="comics">
       <h3 >{{selectedSerie ? selectedSerie._id : 'Missing Comics'}}</h3>
       <table class="table table-sm table-hover">
         <thead>
