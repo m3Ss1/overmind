@@ -1,4 +1,5 @@
 declare module 'mtg-interfaces' {
+
   export interface ImageUris {
     small: string;
     normal: string;
@@ -133,8 +134,14 @@ declare module 'mtg-interfaces' {
     icon_svg_uri: string;
   }
 
-  export interface DeckCard {
+  export interface CardSummary {
     name: string;
-    quantity: string;
+    quantity: number;
   }
+
+  export interface Deck {
+    name: string;
+    cards: CardSummary[];
+  }
+
 }

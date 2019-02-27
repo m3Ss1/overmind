@@ -3,6 +3,7 @@ const router = express.Router();
 
 let MtgSet = require('../models/MtgSet');
 let MtgCard = require('../models/MtgCard');
+let MtgDeck = require('../models/MtgDeck');
 
 router.use(function timeLog(req, res, next) {
   let date = new Date();
@@ -10,6 +11,19 @@ router.use(function timeLog(req, res, next) {
     date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds(),
     "[" + req.method + "] " + req.url);
   next()
+});
+
+/* CREATE deck */
+router.post('/deck/add', function (req, res) {
+  let deck = req.body;
+  MtgDeck.updateOne(
+    {name: deck.name},
+    {$set: deck},
+    {upsert: true},
+    function (err, result) {
+      if (err) res.send(err);
+      res.send(result);
+    });
 });
 
 /* CREATE set */

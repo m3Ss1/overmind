@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 import {HttpClient} from '@angular/common/http';
-import {Card, Set} from 'mtg-interfaces';
+import {Card, Deck, Set} from 'mtg-interfaces';
 import {environment} from '../../environments/environment';
 
 const API_URL = environment.apiUrl;
@@ -55,4 +55,7 @@ export class MtgService {
     return this.http.get<Card[]>(API_URL + '/api/mtg/card/notInSet');
   }
 
+  persistDeck(deck: Deck) {
+    return this.http.post(API_URL + '/api/mtg/deck/add', deck);
+  }
 }

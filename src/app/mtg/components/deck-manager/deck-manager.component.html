@@ -13,7 +13,9 @@
     </div>
 
     <div class="col-md-2">
-      Available space
+      <ul class="list-group" *ngFor="let log of rightLogArea">
+        <li class="list-group-item">{{log}}</li>
+      </ul>
     </div>
   </div>
 </div>
