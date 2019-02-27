@@ -1,0 +1,19 @@
+<div class="container-fluid">
+  <div class="row mt-2">
+
+    <div class="col-md-2">
+      <ul class="list-group">
+        <li class="list-group-item">Deck1</li>
+      </ul>
+    </div>
+
+    <div class="col-md-8">
+      <textarea placeholder="Input deck here" rows="10" cols="10" class="form-control" [(ngModel)]="textAreaContent"></textarea>
+      <button class="btn btn-primary mt-1" (click)="importDeck()">Import Deck</button>
+    </div>
+
+    <div class="col-md-2">
+      Available space
+    </div>
+  </div>
+</div>

@@ -133,4 +133,8 @@ declare module 'mtg-interfaces' {
     icon_svg_uri: string;
   }
 
+  export interface DeckCard {
+    name: string;
+    quantity: string;
+  }
 }

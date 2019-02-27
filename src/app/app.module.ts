@@ -12,6 +12,7 @@ import {ListComicsComponent} from './comics/components/list-comics/list-comics.c
 import {ComicsService} from './comics/comics.service';
 import {ScryImportComponent} from './mtg/components/scry-import/scry-import.component';
 import {MtgDashboardComponent, MtgImgModalContentComponent} from './mtg/components/mtg-dashboard/mtg-dashboard.component';
+import { DeckManagerComponent } from './mtg/components/deck-manager/deck-manager.component';
 import {MtgService} from './mtg/mtg.service';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 
@@ -19,6 +20,7 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 const routes: Routes = [
     {path: 'comics', component: ListComicsComponent},
     {path: 'mtg-dashboard', component: MtgDashboardComponent},
+    {path: 'deck-manager', component: DeckManagerComponent},
     {path: 'mtg-scry-import', component: ScryImportComponent}
   ]
 ;
@@ -29,7 +31,8 @@ const routes: Routes = [
     ListComicsComponent,
     ScryImportComponent,
     MtgDashboardComponent,
-    MtgImgModalContentComponent
+    MtgImgModalContentComponent,
+    DeckManagerComponent
   ],
   imports: [
     RouterModule.forRoot(routes),
