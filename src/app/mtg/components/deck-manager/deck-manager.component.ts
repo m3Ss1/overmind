@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {MtgService} from '../../mtg.service';
-import {CardSummary, Deck} from 'mtg-interfaces';
+import {MtgDeck} from './MtgDeck';
+import {MtgCardSummary} from './MtgCardSummary';
 
 @Component({
   selector: 'app-deck-manager',
@@ -9,35 +10,29 @@ import {CardSummary, Deck} from 'mtg-interfaces';
 })
 export class DeckManagerComponent implements OnInit {
 
-  rightLogArea: String[] = [];
-  textAreaContent: String = '1 Llanowar Elves\r\n10 Mountain';
+  deckTitle: string;
+  rightLogArea: string[] = [];
+  textAreaContent: string;
 
   constructor(private mtgService: MtgService) {
   }
 
   ngOnInit() {
+    this.deckTitle = 'Test Deck';
+    this.textAreaContent = '1 Llanowar Elves\r\n10 Mountain';
   }
 
   importDeck() {
     if (this.textAreaContent) {
-      const deck: Deck = new class implements Deck {
-        cards: CardSummary[] = [];
-        name: string;
-      };
-      deck.name = 'Test Deck';
+      const deck: MtgDeck = new MtgDeck(this.deckTitle);
+
       const lines = this.textAreaContent.split(/\r\n|\r|\n/g);
       for (const line of lines) {
         if (line.trim().length === 0) {
           continue;
         }
         const tokens = line.trim().split(/ (.+)/);
-        const cardSummary: CardSummary = new class implements CardSummary {
-          name: string;
-          quantity: number;
-        };
-        cardSummary.name = tokens[1];
-        cardSummary.quantity = Number(tokens[0]);
-        deck.cards.push(cardSummary);
+        deck.cards.push(new MtgCardSummary(tokens[1], Number(tokens[0])));
       }
       // persist deck
       this.mtgService.persistDeck(deck).subscribe(res => {
@@ -46,8 +41,4 @@ export class DeckManagerComponent implements OnInit {
     }
   }
 
-  /*
-  1 Llanowar Elves
-  10 Mountain
-  */
 }

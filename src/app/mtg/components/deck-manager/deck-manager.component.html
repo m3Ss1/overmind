@@ -8,6 +8,7 @@
     </div>
 
     <div class="col-md-8">
+      <input type="text" [(ngModel)]="deckTitle" placeholder="Deck Title"/>
       <textarea placeholder="Input deck here" rows="10" cols="10" class="form-control" [(ngModel)]="textAreaContent"></textarea>
       <button class="btn btn-primary mt-1" (click)="importDeck()">Import Deck</button>
     </div>

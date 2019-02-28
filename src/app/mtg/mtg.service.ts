@@ -58,4 +58,5 @@ export class MtgService {
   persistDeck(deck: Deck) {
     return this.http.post(API_URL + '/api/mtg/deck/add', deck);
   }
+
 }
