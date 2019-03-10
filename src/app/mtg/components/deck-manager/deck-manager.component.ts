@@ -1,7 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {MtgService} from '../../mtg.service';
-import {MtgDeck} from './MtgDeck';
-import {MtgCardSummary} from './MtgCardSummary';
+import {CardSummary, Deck} from 'mtg-interfaces';
 
 @Component({
   selector: 'app-deck-manager',
@@ -24,7 +23,9 @@ export class DeckManagerComponent implements OnInit {
 
   importDeck() {
     if (this.textAreaContent) {
-      const deck: MtgDeck = new MtgDeck(this.deckTitle);
+      const deck = {} as Deck;
+      deck.name = this.deckTitle;
+      deck.cards = [];
 
       const lines = this.textAreaContent.split(/\r\n|\r|\n/g);
       for (const line of lines) {
@@ -32,7 +33,10 @@ export class DeckManagerComponent implements OnInit {
           continue;
         }
         const tokens = line.trim().split(/ (.+)/);
-        deck.cards.push(new MtgCardSummary(tokens[1], Number(tokens[0])));
+        const summary = {} as CardSummary;
+        summary.name = tokens[1];
+        summary.quantity = Number(tokens[0]);
+        deck.cards.push(summary);
       }
       // persist deck
       this.mtgService.persistDeck(deck).subscribe(res => {
