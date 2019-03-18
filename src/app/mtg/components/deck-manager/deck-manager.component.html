@@ -3,7 +3,10 @@
 
     <div class="col-md-2">
       <ul class="list-group">
-        <li class="list-group-item">Deck1</li>
+        <li class="list-group-item" *ngFor="let deck of decks" (click)="deckToString(deck)">
+          {{deck.name}} ({{deck.cards.length}})
+          <button class="btn btn-secondary small" (click)="removeDeck(deck)">X</button>
+        </li>
       </ul>
     </div>
 

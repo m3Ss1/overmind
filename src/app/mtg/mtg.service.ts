@@ -59,4 +59,11 @@ export class MtgService {
     return this.http.post(API_URL + '/api/mtg/deck/add', deck);
   }
 
+  getAllDecks() {
+    return this.http.get<Deck[]>(API_URL + '/api/mtg/deck/all');
+  }
+
+  deleteDeck(deck: Deck) {
+    return this.http.post(API_URL + '/api/mtg/deck/delete', deck);
+  }
 }

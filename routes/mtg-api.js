@@ -26,6 +26,22 @@ router.post('/deck/add', function (req, res) {
     });
 });
 
+/* DELETE deck */
+router.post('/deck/delete', function (req, res) {
+  MtgDeck.deleteOne({_id: req.body._id}, function (err) {
+    if (err) res.send({status: 'delete set error'});
+    res.send({status: 'ok'});
+  });
+});
+
+/* GET all decks */
+router.get('/deck/all', function (req, res) {
+  MtgDeck.find({}, function (err, sets) {
+    if (err) res.send(err);
+    res.send(sets);
+  }).sort([['name', 1]]);
+});
+
 /* CREATE set */
 router.post('/set/add', function (req, res) {
   let set = req.body;

@@ -11,6 +11,7 @@ export class DeckManagerComponent implements OnInit {
 
   deckTitle: string;
   rightLogArea: string[] = [];
+  decks: Deck[] = [];
   textAreaContent: string;
 
   constructor(private mtgService: MtgService) {
@@ -19,6 +20,13 @@ export class DeckManagerComponent implements OnInit {
   ngOnInit() {
     this.deckTitle = 'Test Deck';
     this.textAreaContent = '1 Llanowar Elves\r\n10 Mountain';
+    this.getAllDecks();
+  }
+
+  getAllDecks() {
+    this.mtgService.getAllDecks().subscribe(res => {
+      this.decks = res;
+    });
   }
 
   importDeck() {
@@ -41,8 +49,23 @@ export class DeckManagerComponent implements OnInit {
       // persist deck
       this.mtgService.persistDeck(deck).subscribe(res => {
         this.rightLogArea.push(JSON.stringify(res));
+        this.getAllDecks();
       });
     }
   }
 
+  deckToString(deck: Deck) {
+    this.deckTitle = deck.name;
+    this.textAreaContent = '';
+    for (const card of deck.cards) {
+      this.textAreaContent += card.quantity + ' ' + card.name + '\n';
+    }
+  }
+
+  removeDeck(deck: Deck) {
+    this.mtgService.deleteDeck(deck).subscribe(res => {
+      this.rightLogArea.push(JSON.stringify(res));
+      this.getAllDecks();
+    });
+  }
 }
