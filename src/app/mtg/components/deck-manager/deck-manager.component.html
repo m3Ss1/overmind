@@ -5,15 +5,27 @@
       <ul class="list-group">
         <li class="list-group-item" *ngFor="let deck of decks" (click)="deckToString(deck)">
           {{deck.name}} ({{deck.cards.length}})
-          <button class="btn btn-secondary small" (click)="removeDeck(deck)">X</button>
+          <button class="btn btn-outline-danger btn-sm float-right" (click)="removeDeck(deck)">X</button>
         </li>
       </ul>
     </div>
 
     <div class="col-md-8">
       <input type="text" [(ngModel)]="deckTitle" placeholder="Deck Title"/>
-      <textarea placeholder="Input deck here" rows="10" cols="10" class="form-control" [(ngModel)]="textAreaContent"></textarea>
-      <button class="btn btn-primary mt-1" (click)="importDeck()">Import Deck</button>
+      <textarea placeholder="Input deck here" rows="5" cols="5" class="form-control mt-1" [(ngModel)]="textAreaContent"></textarea>
+      <button class="btn btn-outline-primary mt-1" (click)="importDeck()">Save</button>
+      <button class="btn btn-outline-secondary mt-1 ml-1" (click)="analyzeDeck()">Check</button>
+
+      <div class="list-group mt-2" *ngIf="analyzedCards && selectedDeck">
+        <div *ngFor="let card of selectedDeck.cards">
+          <div>
+            <div class="float-left">{{card.quantity}}x {{card.name}}</div>
+            <div class="float-left" *ngFor="let mapCard of analyzedCards.get(card.name)">
+              [{{mapCard.collection_count}}<span class="ss ss-{{mapCard.set}} ss-fw mr-1"></span>]
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <div class="col-md-2">
@@ -22,4 +34,5 @@
       </ul>
     </div>
   </div>
+
 </div>

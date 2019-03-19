@@ -12,14 +12,14 @@ export class DeckManagerComponent implements OnInit {
   deckTitle: string;
   rightLogArea: string[] = [];
   decks: Deck[] = [];
+  selectedDeck: Deck;
   textAreaContent: string;
+  analyzedCards = new Map();
 
   constructor(private mtgService: MtgService) {
   }
 
   ngOnInit() {
-    this.deckTitle = 'Test Deck';
-    this.textAreaContent = '1 Llanowar Elves\r\n10 Mountain';
     this.getAllDecks();
   }
 
@@ -55,6 +55,7 @@ export class DeckManagerComponent implements OnInit {
   }
 
   deckToString(deck: Deck) {
+    this.selectedDeck = deck;
     this.deckTitle = deck.name;
     this.textAreaContent = '';
     for (const card of deck.cards) {
@@ -67,5 +68,25 @@ export class DeckManagerComponent implements OnInit {
       this.rightLogArea.push(JSON.stringify(res));
       this.getAllDecks();
     });
+  }
+
+  analyzeDeck() {
+    if (this.selectedDeck) {
+      const cardNames: String[] = [];
+      for (const card of this.selectedDeck.cards) {
+        cardNames.push(card.name);
+      }
+      this.mtgService.findCards(cardNames).subscribe(res => {
+        // Build the map for display
+        for (const deckCard of this.selectedDeck.cards) {
+          this.analyzedCards.set(deckCard.name, []);
+          for (const foundCard of res) {
+            if (foundCard.name === deckCard.name) {
+              this.analyzedCards.get(deckCard.name).push(foundCard);
+            }
+          }
+        }
+      });
+    }
   }
 }

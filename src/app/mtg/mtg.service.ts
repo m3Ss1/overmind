@@ -66,4 +66,8 @@ export class MtgService {
   deleteDeck(deck: Deck) {
     return this.http.post(API_URL + '/api/mtg/deck/delete', deck);
   }
+
+  findCards(cardNames: String[]) {
+    return this.http.post<Card[]>(API_URL + '/api/mtg/card/find/byName', cardNames);
+  }
 }

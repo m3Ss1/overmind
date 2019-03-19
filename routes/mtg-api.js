@@ -111,6 +111,17 @@ router.get('/card/filter/:setCode/:rarity/:onlyMissing', function (req, res) {
   }).sort({'released_at': -1, 'set': 1, 'display_number': 1});
 });
 
+/* GET cards by name */
+router.post('/card/find/byName', function (req, res) {
+  let cardNames = req.body;
+  MtgCard.find(
+    {name: {$in: cardNames}},
+    function (err, comics) {
+    if (err) res.send(err);
+    res.send(comics);
+  }).sort({'name': 1, 'released_at': -1});
+});
+
 /* UPDATE card */
 router.put('/card/update', function (req, res) {
   let mtgCard = req.body;
